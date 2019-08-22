@@ -1,6 +1,6 @@
 # WordPress.org Plugin Deploy
 
-This Action commits the contents of your Git tag to the WordPress.org plugin repository using the same tag name. It excludes files in `.git` and `.github` subdirectories and moves anything from a `.wordpress-org` subdirectory to the top-level `assets` directory in Subversion (plugin banners, icons, and screenshots).
+This Action commits the contents of your Git tag to the WordPress.org plugin repository using the same tag name. It excludes Git-specific items or files and directories as optionally defined in your `.gitattributes` file, and moves anything from a `.wordpress-org` subdirectory to the top-level `assets` directory in Subversion (plugin banners, icons, and screenshots).
 
 ## Configuration
 
@@ -16,8 +16,19 @@ Secrets can be set while editing your workflow or in the repository settings. Th
 * `VERSION` - defaults to the tag name; do not recommend setting this except for testing purposes
 * `ASSETS_DIR` - defaults to `.wordpress-org`, customizable for other locations of WordPress.org plugin repository-specific assets that belong in the top-level `assets` directory (the one on the same level as `trunk`)
 
-### Known issues
-* Currently the `tags` filter on the `push` action does not seem to work correctly, so we target the `refs/tags/*` naming of a branch instead. Ideally for readability and correctness this would use something like `tags: - *`.
+### Excluding files from deployment
+If there are files or directories to be excluded from deployment, such as tests or editor config files, they can be specified in your `.gitattributes` file using the `export-ignore` directive. If you use this method, please be sure to include the following items:
+
+```
+# Directories
+/.wordpress-org export-ignore
+/.github export-ignore
+
+# Files
+/.gitattributes export-ignore
+/.gitignore export-ignore
+```
+
 
 ## Example Workflow File
 ```
@@ -40,6 +51,9 @@ jobs:
         SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
         SLUG: my-super-cool-plugin
 ```
+
+### Known issues
+* Currently the `tags` filter on the `push` action does not work as expected, so we target the `refs/tags/*` naming of a branch instead. Ideally for readability and correctness this would use something like `tags: - *`.
 
 ## Contributing
 Want to help? Check out our [contributing guidelines](../CONTRIBUTING.md) to get started.
