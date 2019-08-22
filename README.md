@@ -56,7 +56,7 @@ jobs:
 * Currently the `tags` filter on the `push` action does not work as expected, so we target the `refs/tags/*` naming of a branch instead. Ideally for readability and correctness this would use something like `tags: - *`.
 
 ## Contributing
-Want to help? Check out our [contributing guidelines](../CONTRIBUTING.md) to get started.
+Want to help? Check out our [contributing guidelines](CONTRIBUTING.md) to get started.
 
 <p align="center">
 <a href="http://10up.com/contact/"><img src="https://10updotcom-wpengine.s3.amazonaws.com/uploads/2016/10/10up-Github-Banner.png" width="850"></a>
