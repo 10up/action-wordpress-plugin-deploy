@@ -19,7 +19,7 @@ Secrets can be set while editing your workflow or in the repository settings. Th
 ### Excluding files from deployment
 If there are files or directories to be excluded from deployment, such as tests or editor config files, they can be specified in your `.gitattributes` file using the `export-ignore` directive. If you use this method, please be sure to include the following items:
 
-```
+```gitattributes
 # Directories
 /.wordpress-org export-ignore
 /.github export-ignore
@@ -31,7 +31,7 @@ If there are files or directories to be excluded from deployment, such as tests 
 
 
 ## Example Workflow File
-```
+```yml
 name: Deploy to WordPress.org
 on:
   push:
