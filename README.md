@@ -35,8 +35,8 @@ If there are files or directories to be excluded from deployment, such as tests 
 name: Deploy to WordPress.org
 on:
   push:
-    branches:
-    - refs/tags/*
+    tags:
+    - "*"
 jobs:
   tag:
     name: New tag
@@ -51,9 +51,6 @@ jobs:
         SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
         SLUG: my-super-cool-plugin
 ```
-
-### Known issues
-* Currently the `tags` filter on the `push` action does not work as expected, so we target the `refs/tags/*` naming of a branch instead. Ideally for readability and correctness this would use something like `tags: - *`.
 
 ## Contributing
 Want to help? Check out our [contributing guidelines](CONTRIBUTING.md) to get started.
