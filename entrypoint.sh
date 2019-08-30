@@ -50,12 +50,12 @@ svn update --set-depth infinity trunk
 
 echo "➤ Copying files..."
 if [[ -e "$GITHUB_WORKSPACE/.distignore" ]]; then
-	echo "Using .distignore"
+	echo "ℹ︎ Using .distignore"
 	# Copy from current branch to /trunk, excluding dotorg assets
 	# The --delete flag will delete anything in destination that no longer exists in source
 	rsync -rc --exclude-from="$GITHUB_WORKSPACE/.distignore" "$GITHUB_WORKSPACE/" trunk/ --delete
 else
-	echo "Using .gitattributes"
+	echo "ℹ︎ Using .gitattributes"
 
 	cd "$GITHUB_WORKSPACE"
 
