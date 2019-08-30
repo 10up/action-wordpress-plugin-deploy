@@ -20,12 +20,6 @@ if [[ -z "$SVN_PASSWORD" ]]; then
 	exit 1
 fi
 
-if [[ -z "$GITHUB_TOKEN" ]]; then
-	echo "ℹ︎ Deploying current working files"
-else
-	echo "ℹ︎ Deploying files from git archive"
-fi
-
 # Allow some ENV variables to be customized
 if [[ -z "$SLUG" ]]; then
 	SLUG=${GITHUB_REPOSITORY#*/}
@@ -55,20 +49,14 @@ svn update --set-depth infinity assets
 svn update --set-depth infinity trunk
 
 echo "➤ Copying files..."
-if [[ -z "$GITHUB_TOKEN" ]]; then
-	# If there's no .distignore file, write a default one into place
-	if [[ ! -e "$GITHUB_WORKSPACE/.distignore" ]]; then
-		cat > "$GITHUB_WORKSPACE/.distignore" <<-EOL
-		/$ASSETS_DIR
-		/.git*
-		/.distignore
-		EOL
-	fi
-
+if [[ -e "$GITHUB_WORKSPACE/.distignore" ]]; then
+	echo "Using .distignore"
 	# Copy from current branch to /trunk, excluding dotorg assets
 	# The --delete flag will delete anything in destination that no longer exists in source
-	rsync -r --exclude-from="$GITHUB_WORKSPACE/.distignore" "$GITHUB_WORKSPACE/" trunk/ --delete
+	rsync -rc --exclude-from="$GITHUB_WORKSPACE/.distignore" "$GITHUB_WORKSPACE/" trunk/ --delete
 else
+	echo "Using .gitattributes"
+
 	cd "$GITHUB_WORKSPACE"
 
 	# "Export" a cleaned copy to a temp directory
