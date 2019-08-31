@@ -1,23 +1,45 @@
 # WordPress.org Plugin Deploy
 
-This Action commits the contents of your Git tag to the WordPress.org plugin repository using the same tag name. It excludes Git-specific items or files and directories as optionally defined in your `.gitattributes` file, and moves anything from a `.wordpress-org` subdirectory to the top-level `assets` directory in Subversion (plugin banners, icons, and screenshots).
+This Action commits the contents of your Git tag to the WordPress.org plugin repository using the same tag name. It can exclude files as defined in either `.distignore` or `.gitattributes`, and moves anything from a `.wordpress-org` subdirectory to the top-level `assets` directory in Subversion (plugin banners, icons, and screenshots).
+
+### For updating the readme and items in the assets directory between releases, please see our [WordPress.org Plugin Readme/Assets Update Action](https://github.com/10up/action-wordpress-plugin-asset-update), part of our [collection of WordPress-focused GitHub Actions](https://github.com/10up/actions-wordpress).
 
 ## Configuration
 
 ### Required secrets
 * `SVN_USERNAME`
 * `SVN_PASSWORD`
-* `GITHUB_TOKEN` - you do not need to generate one but you do have to explicitly make it available to the Action
 
-Secrets can be set while editing your workflow or in the repository settings. They cannot be viewed once stored. [GitHub secrets documentation](https://developer.github.com/actions/creating-workflows/storing-secrets/)
+[Secrets are set your repository settings](https://help.github.com/en/articles/virtual-environments-for-github-actions#creating-and-using-secrets-encrypted-variables). They cannot be viewed once stored.
 
 ### Optional environment variables
 * `SLUG` - defaults to the respository name, customizable in case your WordPress repository has a different slug. This should be a very rare case as WordPress assumes that the directory and initial plugin file have the same slug.
 * `VERSION` - defaults to the tag name; do not recommend setting this except for testing purposes
 * `ASSETS_DIR` - defaults to `.wordpress-org`, customizable for other locations of WordPress.org plugin repository-specific assets that belong in the top-level `assets` directory (the one on the same level as `trunk`)
 
-### Excluding files from deployment
-If there are files or directories to be excluded from deployment, such as tests or editor config files, they can be specified in your `.gitattributes` file using the `export-ignore` directive. If you use this method, please be sure to include the following items:
+## Excluding files from deployment
+If there are files or directories to be excluded from deployment, such as tests or editor config files, they can be specified in either a `.distignore` file or a `.gitattributes` file using the `export-ignore` directive. If a `.distignore` file is present, it will be used; if not, the Action will look for a `.gitattributes` file and barring that, will write a basic temporary `.gitattributes` into place before proceeding so that no Git-specific files are included.
+
+`.distignore` is useful particularly when there are built files that are in `.gitignore`, and is a file that is used in @wp-cli. For modern plugin setups with a build step and no built files committed to the repository, this is the way forward. `.gitattributes` is useful for plugins that don't run a build step as a part of the Actions workflow and also allows for GitHub's generated ZIP files to contain the same contents as what is committed to WordPress.org. If you would like to attach a ZIP file that decompresses to a folder name without version number as WordPress generally expects, you can add steps to your workflow that generate the ZIP and attach it to the GitHub release (concrete examples to come).
+
+### Sample baseline files
+
+#### `.distignore`
+
+Notes: `.distignore` is for files to be ignored **only**; it does not currently allow negation like `.gitignore`. This comes from its current expected syntax in @wp-cli's [`wp dist-archive` command](https://github.com/wp-cli/dist-archive-command/). It is possible that this Action will allow for includes via something like a `.distinclude` file in the future, or that @wp-cli itself makes a change that this Action will reflect for consistency. It also will need to contain more than `.gitattributes` because that method **also** respects `.gitignore`.
+
+```
+/.wordpress-org
+/.git
+/.github
+/node_modules
+
+.DS_Store
+.distignore
+.gitignore
+```
+
+#### `.gitattributes`
 
 ```gitattributes
 # Directories
@@ -46,7 +68,6 @@ jobs:
     - name: WordPress Plugin Deploy
       uses: 10up/action-wordpress-plugin-deploy@master
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
         SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
         SLUG: my-super-cool-plugin
