@@ -4,8 +4,6 @@ This Action commits the contents of your Git tag to the WordPress.org plugin rep
 
 ### ☞ For updating the readme and items in the assets directory between releases, please see our [WordPress.org Plugin Readme/Assets Update Action](https://github.com/10up/action-wordpress-plugin-asset-update)
 
-### ☞ See our [collection of WordPress-focused GitHub Actions](https://github.com/10up/actions-wordpress)
-
 ## Configuration
 
 ### Required secrets
@@ -89,3 +87,4 @@ Want to help? Check out our [contributing guidelines](CONTRIBUTING.md) to get st
 
 Our GitHub Actions are available for use and remix under the MIT license.
 
+### ☞ Check out our [collection of WordPress-focused GitHub Actions](https://github.com/10up/actions-wordpress)
