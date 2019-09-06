@@ -92,7 +92,9 @@ else
 fi
 
 # Copy dotorg assets to /assets
-rsync -rc "$GITHUB_WORKSPACE/$ASSETS_DIR/" assets/ --delete
+if [[ -d "$GITHUB_WORKSPACE/$ASSETS_DIR/" ]]; then
+	rsync -rc "$GITHUB_WORKSPACE/$ASSETS_DIR/" assets/ --delete
+fi
 
 # Add everything and commit to SVN
 # The force flag ensures we recurse into subdirectories even if they are already added
