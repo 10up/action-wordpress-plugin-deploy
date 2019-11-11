@@ -1,0 +1,9 @@
+name: 'WordPress Plugin Deploy'
+description: 'Deploy to the WordPress Plugin Repository'
+author: '10up'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+branding:
+  icon: 'upload-cloud'
+  color: 'blue'
