@@ -38,6 +38,11 @@ if [[ -z "$ASSETS_DIR" ]]; then
 fi
 echo "ℹ︎ ASSETS_DIR is $ASSETS_DIR"
 
+if [[ -z "$WORKSPACE_DIR" ]]; then
+	WORKSPACE_DIR=$GITHUB_WORKSPACE
+fi
+echo "ℹ︎ $WORKSPACE_DIR is $GITHUB_WORKSPACE"
+
 SVN_URL="https://plugins.svn.wordpress.org/${SLUG}/"
 SVN_DIR="/github/svn-${SLUG}"
 
@@ -50,15 +55,15 @@ svn update --set-depth infinity assets
 svn update --set-depth infinity trunk
 
 echo "➤ Copying files..."
-if [[ -e "$GITHUB_WORKSPACE/.distignore" ]]; then
+if [[ -e "$WORKSPACE_DIR/.distignore" ]]; then
 	echo "ℹ︎ Using .distignore"
 	# Copy from current branch to /trunk, excluding dotorg assets
 	# The --delete flag will delete anything in destination that no longer exists in source
-	rsync -rc --exclude-from="$GITHUB_WORKSPACE/.distignore" "$GITHUB_WORKSPACE/" trunk/ --delete --delete-excluded 
+	rsync -rc --exclude-from="$WORKSPACE_DIR/.distignore" "$WORKSPACE_DIR/" trunk/ --delete --delete-excluded
 else
 	echo "ℹ︎ Using .gitattributes"
 
-	cd "$GITHUB_WORKSPACE"
+	cd "$WORKSPACE_DIR"
 
 	# "Export" a cleaned copy to a temp directory
 	TMP_DIR="/github/archivetmp"
@@ -68,15 +73,15 @@ else
 	git config --global user.name "10upbot on GitHub"
 
 	# If there's no .gitattributes file, write a default one into place
-	if [[ ! -e "$GITHUB_WORKSPACE/.gitattributes" ]]; then
-		cat > "$GITHUB_WORKSPACE/.gitattributes" <<-EOL
+	if [[ ! -e "$WORKSPACE_DIR/.gitattributes" ]]; then
+		cat > "$WORKSPACE_DIR/.gitattributes" <<-EOL
 		/$ASSETS_DIR export-ignore
 		/.gitattributes export-ignore
 		/.gitignore export-ignore
 		/.github export-ignore
 		EOL
 
-		# Ensure we are in the $GITHUB_WORKSPACE directory, just in case
+		# Ensure we are in the $WORKSPACE_DIR directory, just in case
 		# The .gitattributes file has to be committed to be used
 		# Just don't push it to the origin repo :)
 		git add .gitattributes && git commit -m "Add .gitattributes file"
@@ -93,8 +98,8 @@ else
 fi
 
 # Copy dotorg assets to /assets
-if [[ -d "$GITHUB_WORKSPACE/$ASSETS_DIR/" ]]; then
-	rsync -rc "$GITHUB_WORKSPACE/$ASSETS_DIR/" assets/ --delete
+if [[ -d "$WORKSPACE_DIR/$ASSETS_DIR/" ]]; then
+	rsync -rc "$WORKSPACE_DIR/$ASSETS_DIR/" assets/ --delete
 else
 	echo "ℹ︎ No assets directory found; skipping asset copy"
 fi
