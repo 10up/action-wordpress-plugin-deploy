@@ -46,6 +46,11 @@ if [[ -z "$ASSETS_DIR" ]]; then
 fi
 echo "ℹ︎ ASSETS_DIR is $ASSETS_DIR"
 
+if [[ -z "$WORKSPACE_DIR" ]]; then
+	WORKSPACE_DIR=$GITHUB_WORKSPACE
+fi
+echo "ℹ︎ $WORKSPACE_DIR is $GITHUB_WORKSPACE"
+
 SVN_URL="https://plugins.svn.wordpress.org/${SLUG}/"
 SVN_DIR="/github/svn-${SLUG}"
 
@@ -62,11 +67,11 @@ if [[ -e "$GITHUB_WORKSPACE/.distignore" ]]; then
 	echo "ℹ︎ Using .distignore"
 	# Copy from current branch to /trunk, excluding dotorg assets
 	# The --delete flag will delete anything in destination that no longer exists in source
-	rsync -rc --exclude-from="$GITHUB_WORKSPACE/.distignore" "$GITHUB_WORKSPACE/" trunk/ --delete --delete-excluded
+	rsync -rc --exclude-from="$GITHUB_WORKSPACE/.distignore" "$WORKSPACE_DIR/" trunk/ --delete --delete-excluded
 else
 	echo "ℹ︎ Using .gitattributes"
 
-	cd "$GITHUB_WORKSPACE"
+	cd "$WORKSPACE_DIR"
 
 	# "Export" a cleaned copy to a temp directory
 	TMP_DIR="/github/archivetmp"
@@ -84,7 +89,7 @@ else
 		/.github export-ignore
 		EOL
 
-		# Ensure we are in the $GITHUB_WORKSPACE directory, just in case
+		# Ensure we are in the $WORKSPACE_DIR directory, just in case
 		# The .gitattributes file has to be committed to be used
 		# Just don't push it to the origin repo :)
 		git add .gitattributes && git commit -m "Add .gitattributes file"
