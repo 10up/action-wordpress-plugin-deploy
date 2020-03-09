@@ -16,6 +16,7 @@ This Action commits the contents of your Git tag to the WordPress.org plugin rep
 * `SLUG` - defaults to the repository name, customizable in case your WordPress repository has a different slug or is capitalized differently.
 * `VERSION` - defaults to the tag name; do not recommend setting this except for testing purposes.
 * `ASSETS_DIR` - defaults to `.wordpress-org`, customizable for other locations of WordPress.org plugin repository-specific assets that belong in the top-level `assets` directory (the one on the same level as `trunk`).
+* `WORKSPACE_DIR` - defaults to `$GITHUB_WORKSPACE`, customizable for other locations. 
 
 ## Excluding files from deployment
 If there are files or directories to be excluded from deployment, such as tests or editor config files, they can be specified in either a `.distignore` file or a `.gitattributes` file using the `export-ignore` directive. If a `.distignore` file is present, it will be used; if not, the Action will look for a `.gitattributes` file and barring that, will write a basic temporary `.gitattributes` into place before proceeding so that no Git/GitHub-specific files are included.
