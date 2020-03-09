@@ -71,6 +71,7 @@ if [[ -e "$GITHUB_WORKSPACE/.distignore" ]]; then
 else
 	echo "ℹ︎ Using .gitattributes"
 
+	cd "$GITHUB_WORKSPACE"
 	cd "$WORKSPACE_DIR"
 
 	# "Export" a cleaned copy to a temp directory
