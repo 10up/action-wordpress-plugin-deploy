@@ -49,7 +49,7 @@ echo "ℹ︎ ASSETS_DIR is $ASSETS_DIR"
 if [[ -z "$WORKSPACE_DIR" ]]; then
 	WORKSPACE_DIR=$GITHUB_WORKSPACE
 fi
-echo "ℹ︎ $WORKSPACE_DIR is $GITHUB_WORKSPACE"
+echo "ℹ︎ WORKSPACE_DIR is $WORKSPACE_DIR"
 
 SVN_URL="https://plugins.svn.wordpress.org/${SLUG}/"
 SVN_DIR="/github/svn-${SLUG}"
