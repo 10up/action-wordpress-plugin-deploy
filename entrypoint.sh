@@ -28,8 +28,8 @@ echo "ℹ︎ SLUG is $SLUG"
 
 # Does it even make sense for VERSION to be editable in a workflow definition?
 if [[ -z "$VERSION" ]]; then
-	VERSION=${GITHUB_REF#refs/tags/}
-	VERSION=$(echo $VERSION | sed -e "s/^v//")
+	VERSION="${GITHUB_REF#refs/tags/}"
+	VERSION="${VERSION#v}"
 fi
 echo "ℹ︎ VERSION is $VERSION"
 
@@ -38,7 +38,7 @@ if [[ -z "$ASSETS_DIR" ]]; then
 fi
 echo "ℹ︎ ASSETS_DIR is $ASSETS_DIR"
 
-SVN_URL="http://plugins.svn.wordpress.org/${SLUG}/"
+SVN_URL="https://plugins.svn.wordpress.org/${SLUG}/"
 SVN_DIR="/github/svn-${SLUG}"
 
 # Checkout just trunk and assets for efficiency
@@ -54,7 +54,7 @@ if [[ -e "$GITHUB_WORKSPACE/.distignore" ]]; then
 	echo "ℹ︎ Using .distignore"
 	# Copy from current branch to /trunk, excluding dotorg assets
 	# The --delete flag will delete anything in destination that no longer exists in source
-	rsync -rc --exclude-from="$GITHUB_WORKSPACE/.distignore" "$GITHUB_WORKSPACE/" trunk/ --delete
+	rsync -rc --exclude-from="$GITHUB_WORKSPACE/.distignore" "$GITHUB_WORKSPACE/" trunk/ --delete --delete-excluded 
 else
 	echo "ℹ︎ Using .gitattributes"
 
@@ -89,7 +89,7 @@ else
 
 	# Copy from clean copy to /trunk, excluding dotorg assets
 	# The --delete flag will delete anything in destination that no longer exists in source
-	rsync -rc "$TMP_DIR/" trunk/ --delete
+	rsync -rc "$TMP_DIR/" trunk/ --delete --delete-excluded
 fi
 
 # Copy dotorg assets to /assets
@@ -107,7 +107,7 @@ svn add . --force > /dev/null
 
 # SVN delete all deleted files
 # Also suppress stdout here
-svn status | grep '^\!' | sed 's/! *//' | xargs -I% svn rm % > /dev/null
+svn status | grep '^\!' | sed 's/! *//' | xargs -I% svn rm %@ > /dev/null
 
 # Copy tag locally to make this a single commit
 echo "➤ Copying tag..."
