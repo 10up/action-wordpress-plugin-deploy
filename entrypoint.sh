@@ -31,7 +31,7 @@ if [[ -z "$ASSETS_DIR" ]]; then
 fi
 echo "ℹ︎ ASSETS_DIR is $ASSETS_DIR"
 
-	WORKSPACE_DIR="./wp-staging-svn/trunk/"
+	WORKSPACE_DIR="$GITHUB_WORKSPACE/wp-staging-svn/trunk/"
 
 echo "ℹ︎ WORKSPACE_DIR is $WORKSPACE_DIR"
 
