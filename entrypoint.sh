@@ -49,6 +49,9 @@ ls $WORKSPACE_DIR
 echo "cd WORKSPACE_DIR:"
 cd $WORKSPACE_DIR
 
+echo "ls .wp-staging-svn:"
+ls /.wp-staging-svn
+
 SVN_URL="https://plugins.svn.wordpress.org/${SLUG}/"
 SVN_DIR="/github/svn-${SLUG}"
 
