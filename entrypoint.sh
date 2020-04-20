@@ -37,9 +37,13 @@ echo "ℹ︎ WORKSPACE_DIR is $WORKSPACE_DIR"
 
 echo "ℹ︎ GITHUB_WORKSPACE is $GITHUB_WORKSPACE"
 
-echo "i $WORKING_DIR"
+echo "i working_dir $WORKING_DIR"
 
-ls /home/runner/work/wp-staging/wp-staging/src
+echo "List content of workspace:"
+ls /github/workspace
+
+echo "List content of current dir:"
+ls ./
 
 exit 1
 
