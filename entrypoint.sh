@@ -26,17 +26,16 @@ if [[ -z "$SLUG" ]]; then
 fi
 echo "ℹ︎ SLUG is $SLUG"
 
-# Does it even make sense for VERSION to be editable in a workflow definition?
-if [[ -z "$VERSION" ]]; then
-	VERSION="${GITHUB_REF#refs/tags/}"
-	VERSION="${VERSION#v}"
-fi
-echo "ℹ︎ VERSION is $VERSION"
-
 if [[ -z "$ASSETS_DIR" ]]; then
 	ASSETS_DIR=".wordpress-org"
 fi
 echo "ℹ︎ ASSETS_DIR is $ASSETS_DIR"
+
+	WORKSPACE_DIR="/home/runner/work/my-repo-name/my-repo-name"
+
+echo "ℹ︎ WORKSPACE_DIR is $WORKSPACE_DIR"
+
+echo "ℹ︎ GITHUB_WORKSPACE is $GITHUB_WORKSPACE"
 
 SVN_URL="https://plugins.svn.wordpress.org/${SLUG}/"
 SVN_DIR="/github/svn-${SLUG}"
