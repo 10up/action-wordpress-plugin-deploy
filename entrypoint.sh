@@ -37,21 +37,11 @@ echo "ℹ︎ WORKSPACE_DIR is $WORKSPACE_DIR"
 
 echo "ℹ︎ GITHUB_WORKSPACE is $GITHUB_WORKSPACE"
 
-echo "i working_dir $WORKING_DIR"
-
 echo "List content of workspace:"
 ls /github/workspace
 
 echo "List content of current dir:"
 ls ./
-
-echo "List content of /:"
-ls /
-
-echo "List content of workspace:"
-ls /releases/workspace
-
-exit 1
 
 SVN_URL="https://plugins.svn.wordpress.org/${SLUG}/"
 SVN_DIR="/github/svn-${SLUG}"
@@ -70,6 +60,8 @@ if [[ -e "$WORKSPACE_DIR/.distignore" ]]; then
 	# Copy from current branch to /trunk, excluding dotorg assets
 	# The --delete flag will delete anything in destination that no longer exists in source
 	rsync -rc --exclude-from="$WORKSPACE_DIR/.distignore" "$WORKSPACE_DIR/" trunk/ --delete --delete-excluded 
+	echo "ls trunk:"
+	ls trunk
 else
 	echo "ℹ︎ Using .gitattributes"
 
@@ -105,6 +97,8 @@ else
 	# Copy from clean copy to /trunk, excluding dotorg assets
 	# The --delete flag will delete anything in destination that no longer exists in source
 	rsync -rc "$TMP_DIR/" trunk/ --delete --delete-excluded
+	echo "ls trunk 2:"
+	ls trunk
 fi
 
 # Copy dotorg assets to /assets
@@ -118,19 +112,22 @@ fi
 # The force flag ensures we recurse into subdirectories even if they are already added
 # Suppress stdout in favor of svn status later for readability
 echo "➤ Preparing files..."
-svn add . --force > /dev/null
+#svn add . --force > /dev/null
 
 # SVN delete all deleted files
 # Also suppress stdout here
-svn status | grep '^\!' | sed 's/! *//' | xargs -I% svn rm %@ > /dev/null
+#svn status | grep '^\!' | sed 's/! *//' | xargs -I% svn rm %@ > /dev/null
 
 # Copy tag locally to make this a single commit
 echo "➤ Copying tag..."
 svn cp "trunk" "tags/$VERSION"
 
+echo "List folder tags/$VERSION"
+ls ./tags/$VERSION
+
 svn status
 
 echo "➤ Committing files..."
-svn commit -m "Update to version $VERSION from GitHub" --no-auth-cache --non-interactive  --username "$SVN_USERNAME" --password "$SVN_PASSWORD"
+#svn commit -m "Update to version $VERSION from GitHub" --no-auth-cache --non-interactive  --username "$SVN_USERNAME" --password "$SVN_PASSWORD"
 
 echo "✓ Plugin deployed!"
