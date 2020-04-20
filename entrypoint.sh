@@ -32,8 +32,9 @@ fi
 echo "ℹ︎ ASSETS_DIR is $ASSETS_DIR"
 
 WORKSPACE_DIR="$GITHUB_WORKSPACE/wp-staging-svn/trunk/"
-
 echo "ℹ︎ WORKSPACE_DIR is $WORKSPACE_DIR"
+
+VERSION="${GITHUB_REF#refs/tags/}"
 
 SVN_URL="https://plugins.svn.wordpress.org/${SLUG}/"
 SVN_DIR="/github/svn-${SLUG}"
@@ -47,33 +48,11 @@ svn update --set-depth infinity assets
 svn update --set-depth infinity trunk
 
 echo "➤ Copying files..."
-if [[ -e "$WORKSPACE_DIR/.distignore" ]]; then
-	echo "ℹ︎ Using .distignore"
-	# Copy from current branch to /trunk, excluding dotorg assets
-	# The --delete flag will delete anything in destination that no longer exists in source
-	rsync -rc --exclude-from="$WORKSPACE_DIR/.distignore" "$WORKSPACE_DIR/" trunk/ --delete --delete-excluded 
-else
-	echo "ℹ︎ Using .gitattributes"
+#rsync -rc "$WORKSPACE_DIR" "trunk/" --delete --delete-excluded
+rsync -rc "$WORKSPACE_DIR" "tags/$version" --delete --delete-excluded
 
-	cd "$WORKSPACE_DIR"
-
-	# "Export" a cleaned copy to a temp directory
-	TMP_DIR="/github/archivetmp"
-	mkdir "$TMP_DIR"
-
-	git config --global user.email "wpstgbot+github@wp-staging.com"
-	git config --global user.name "wpstgbot on GitHub"
-
-	cd "$SVN_DIR"
-
-	echo "Copy from $TMP_DIR clean copy to /trunk, excluding dotorg assets"
-	# The --delete flag will delete anything in destination that no longer exists in source
-	
-	rsync -rc "$TMP_DIR/" trunk/ --delete --delete-excluded
-	
-	echo "ls $SVN_DIR"
-	ls "$SVN_DIR"
-fi
+echo "ls $SVN_DIR/tags"
+ls $SVN_DIR/tags
 
 # Copy dotorg assets to /assets
 if [[ -d "$GITHUB_WORKSPACE/$ASSETS_DIR/" ]]; then
