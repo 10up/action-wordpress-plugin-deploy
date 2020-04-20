@@ -37,20 +37,23 @@ echo "ℹ︎ WORKSPACE_DIR is $WORKSPACE_DIR"
 
 echo "ℹ︎ GITHUB_WORKSPACE is $GITHUB_WORKSPACE"
 
-echo "List content of workspace:"
-ls /github/workspace
+#echo "List content of workspace:"
+#ls /github/workspace
 
-echo "List content of current dir:"
-ls ./
+#echo "List content of current dir:"
+#ls ./
+
+echo "List content of WORKSPACE_DIR:"
+ls "$WORKSPACE_DIR"
 
 echo "List content of WORKSPACE_DIR:"
 ls $WORKSPACE_DIR
 
 echo "ls ./.wp-staging-svn:"
-ls ./.wp-staging-svn/
+ls ./wp-staging-svn/
 
 echo "ls .wp-staging-svn:"
-ls ./.wp-staging-svn/trunk/
+ls ./wp-staging-svn/trunk/
 
 SVN_URL="https://plugins.svn.wordpress.org/${SLUG}/"
 SVN_DIR="/github/svn-${SLUG}"
