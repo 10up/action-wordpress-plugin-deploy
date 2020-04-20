@@ -34,9 +34,10 @@ echo "ℹ︎ ASSETS_DIR is $ASSETS_DIR"
 WORKSPACE_DIR="$GITHUB_WORKSPACE/wp-staging-svn/trunk/"
 echo "ℹ︎ WORKSPACE_DIR is $WORKSPACE_DIR"
 
-VERSION="${GITHUB_REF#refs/tags/}"
-VERSION="${VERSION#v}"
-VERSION="2.7.2"
+if [[ -z "$VERSION" ]]; then
+	VERSION="${GITHUB_REF#refs/tags/}"
+	VERSION="${VERSION#v}"
+fi
 echo "ℹ︎ VERSION is $VERSION"
 
 SVN_URL="https://plugins.svn.wordpress.org/${SLUG}/"
@@ -52,7 +53,7 @@ svn update --set-depth infinity trunk
 
 echo "➤ Copying files..."
 #rsync -rc "$WORKSPACE_DIR" "trunk/" --delete --delete-excluded
-rsync -rc "$WORKSPACE_DIR" "tags/$VERSION" --delete --delete-excluded
+rsync -rc "$WORKSPACE_DIR" "tags/$VERSION/" --delete --delete-excluded
 
 echo "ls $SVN_DIR/tags"
 ls $SVN_DIR/tags
