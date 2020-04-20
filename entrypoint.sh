@@ -36,7 +36,7 @@ echo "ℹ︎ WORKSPACE_DIR is $WORKSPACE_DIR"
 
 VERSION="${GITHUB_REF#refs/tags/}"
 VERSION="${VERSION#v}"
-echo "ℹ︎ VERSION is $WORKSPACE_DIR"
+echo "ℹ︎ VERSION is $VERSION"
 
 SVN_URL="https://plugins.svn.wordpress.org/${SLUG}/"
 SVN_DIR="/github/svn-${SLUG}"
