@@ -45,6 +45,9 @@ ls /github/workspace
 echo "List content of current dir:"
 ls ./
 
+echo "List content of /:"
+ls /
+
 exit 1
 
 SVN_URL="https://plugins.svn.wordpress.org/${SLUG}/"
