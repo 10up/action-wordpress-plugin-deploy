@@ -43,6 +43,12 @@ ls /github/workspace
 echo "List content of current dir:"
 ls ./
 
+echo "List content of WORKSPACE_DIR:"
+ls $WORKSPACE_DIR
+
+echo "cd WORKSPACE_DIR:"
+cd $WORKSPACE_DIR
+
 SVN_URL="https://plugins.svn.wordpress.org/${SLUG}/"
 SVN_DIR="/github/svn-${SLUG}"
 
