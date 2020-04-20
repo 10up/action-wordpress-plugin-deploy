@@ -31,29 +31,9 @@ if [[ -z "$ASSETS_DIR" ]]; then
 fi
 echo "ℹ︎ ASSETS_DIR is $ASSETS_DIR"
 
-	WORKSPACE_DIR="$GITHUB_WORKSPACE/wp-staging-svn/trunk/"
+WORKSPACE_DIR="$GITHUB_WORKSPACE/wp-staging-svn/trunk/"
 
 echo "ℹ︎ WORKSPACE_DIR is $WORKSPACE_DIR"
-
-echo "ℹ︎ GITHUB_WORKSPACE is $GITHUB_WORKSPACE"
-
-#echo "List content of workspace:"
-#ls /github/workspace
-
-#echo "List content of current dir:"
-#ls ./
-
-echo "List content of WORKSPACE_DIR:"
-ls "$WORKSPACE_DIR"
-
-echo "List content of WORKSPACE_DIR:"
-ls $WORKSPACE_DIR
-
-echo "ls ./.wp-staging-svn:"
-ls ./wp-staging-svn/
-
-echo "ls .wp-staging-svn:"
-ls ./wp-staging-svn/trunk/
 
 SVN_URL="https://plugins.svn.wordpress.org/${SLUG}/"
 SVN_DIR="/github/svn-${SLUG}"
@@ -72,8 +52,6 @@ if [[ -e "$WORKSPACE_DIR/.distignore" ]]; then
 	# Copy from current branch to /trunk, excluding dotorg assets
 	# The --delete flag will delete anything in destination that no longer exists in source
 	rsync -rc --exclude-from="$WORKSPACE_DIR/.distignore" "$WORKSPACE_DIR/" trunk/ --delete --delete-excluded 
-	echo "ls trunk:"
-	ls trunk
 else
 	echo "ℹ︎ Using .gitattributes"
 
@@ -86,31 +64,15 @@ else
 	git config --global user.email "wpstgbot+github@wp-staging.com"
 	git config --global user.name "wpstgbot on GitHub"
 
-	# If there's no .gitattributes file, write a default one into place
-	if [[ ! -e "$WORKSPACE_DIR/.gitattributes" ]]; then
-		cat > "$WORKSPACE_DIR/.gitattributes" <<-EOL
-		/$ASSETS_DIR export-ignore
-		/.gitattributes export-ignore
-		/.gitignore export-ignore
-		/.github export-ignore
-		EOL
-
-		# Ensure we are in the $WORKSPACE_DIR directory, just in case
-		# The .gitattributes file has to be committed to be used
-		# Just don't push it to the origin repo :)
-		git add .gitattributes && git commit -m "Add .gitattributes file"
-	fi
-
-	# This will exclude everything in the .gitattributes file with the export-ignore flag
-	git archive HEAD | tar x --directory="$TMP_DIR"
-
 	cd "$SVN_DIR"
 
-	# Copy from clean copy to /trunk, excluding dotorg assets
+	echo "Copy from $TMP_DIR clean copy to /trunk, excluding dotorg assets"
 	# The --delete flag will delete anything in destination that no longer exists in source
+	
 	rsync -rc "$TMP_DIR/" trunk/ --delete --delete-excluded
-	echo "ls trunk 2:"
-	ls trunk
+	
+	echo "ls $SVN_DIR"
+	ls "$SVN_DIR"
 fi
 
 # Copy dotorg assets to /assets
