@@ -57,6 +57,9 @@ rsync -rc "$WORKSPACE_DIR" "tags/$VERSION/" --delete --delete-excluded
 echo "ls $SVN_DIR/tags"
 ls $SVN_DIR/tags
 
+echo "ls $SVN_DIR/tags"
+ls $SVN_DIR/tags/$VERSION/
+
 # Copy dotorg assets to /assets
 if [[ -d "$GITHUB_WORKSPACE/$ASSETS_DIR/" ]]; then
 	rsync -rc "$GITHUB_WORKSPACE/$ASSETS_DIR/" assets/ --delete
@@ -68,19 +71,19 @@ fi
 # The force flag ensures we recurse into subdirectories even if they are already added
 # Suppress stdout in favor of svn status later for readability
 echo "➤ Preparing files..."
-#svn add . --force > /dev/null
+svn add . --force > /dev/null
 
 # SVN delete all deleted files
 # Also suppress stdout here
-#svn status | grep '^\!' | sed 's/! *//' | xargs -I% svn rm %@ > /dev/null
+svn status | grep '^\!' | sed 's/! *//' | xargs -I% svn rm %@ > /dev/null
 
 # Copy tag locally to make this a single commit
-echo "➤ Copying tag..."
+#echo "➤ Copying tag..."
 #svn cp "trunk" "tags/$VERSION"
 
 svn status
 
 echo "➤ Committing files..."
-#svn commit -m "Update to version $VERSION from GitHub" --no-auth-cache --non-interactive  --username "$SVN_USERNAME" --password "$SVN_PASSWORD"
+svn commit -m "Update to version $VERSION from GitHub" --no-auth-cache --non-interactive  --username "$SVN_USERNAME" --password "$SVN_PASSWORD"
 
 echo "✓ Plugin deployed!"
