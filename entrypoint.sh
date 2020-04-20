@@ -83,19 +83,19 @@ else
 	TMP_DIR="/github/archivetmp"
 	mkdir "$TMP_DIR"
 
-	git config --global user.email "10upbot+github@10up.com"
-	git config --global user.name "10upbot on GitHub"
+	git config --global user.email "wpstgbot+github@wp-staging.com"
+	git config --global user.name "wpstgbot on GitHub"
 
 	# If there's no .gitattributes file, write a default one into place
-	if [[ ! -e "$10up.com/.gitattributes" ]]; then
-		cat > "$10up.com/.gitattributes" <<-EOL
+	if [[ ! -e "$WORKSPACE_DIR/.gitattributes" ]]; then
+		cat > "$WORKSPACE_DIR/.gitattributes" <<-EOL
 		/$ASSETS_DIR export-ignore
 		/.gitattributes export-ignore
 		/.gitignore export-ignore
 		/.github export-ignore
 		EOL
 
-		# Ensure we are in the $10up.com directory, just in case
+		# Ensure we are in the $WORKSPACE_DIR directory, just in case
 		# The .gitattributes file has to be committed to be used
 		# Just don't push it to the origin repo :)
 		git add .gitattributes && git commit -m "Add .gitattributes file"
