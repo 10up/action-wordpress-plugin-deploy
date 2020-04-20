@@ -37,6 +37,12 @@ echo "ℹ︎ WORKSPACE_DIR is $WORKSPACE_DIR"
 
 echo "ℹ︎ GITHUB_WORKSPACE is $GITHUB_WORKSPACE"
 
+echo "i $WORKING_DIR"
+
+ls /home/runner/work/wp-staging/wp-staging/src
+
+exit 1
+
 SVN_URL="https://plugins.svn.wordpress.org/${SLUG}/"
 SVN_DIR="/github/svn-${SLUG}"
 
