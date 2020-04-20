@@ -35,8 +35,7 @@ WORKSPACE_DIR="$GITHUB_WORKSPACE/wp-staging-svn/trunk/"
 echo "ℹ︎ WORKSPACE_DIR is $WORKSPACE_DIR"
 
 if [[ -z "$VERSION" ]]; then
-	VERSION="${GITHUB_REF#refs/tags/}"
-	VERSION="${VERSION#v}"
+	VERSION=${GITHUB_REF##*/}
 fi
 echo "ℹ︎ VERSION is $VERSION"
 
