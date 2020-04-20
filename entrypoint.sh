@@ -35,6 +35,7 @@ WORKSPACE_DIR="$GITHUB_WORKSPACE/wp-staging-svn/trunk/"
 echo "ℹ︎ WORKSPACE_DIR is $WORKSPACE_DIR"
 
 VERSION="${GITHUB_REF#refs/tags/}"
+VERSION="${VERSION#v}"
 echo "ℹ︎ VERSION is $WORKSPACE_DIR"
 
 SVN_URL="https://plugins.svn.wordpress.org/${SLUG}/"
