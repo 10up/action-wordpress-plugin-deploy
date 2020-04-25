@@ -51,7 +51,7 @@ svn update --set-depth infinity assets
 svn update --set-depth infinity trunk
 
 echo "➤ Copying files..."
-#rsync -rc "$WORKSPACE_DIR" "trunk/" --delete --delete-excluded
+rsync -rc "$WORKSPACE_DIR" "trunk/" --delete --delete-excluded
 rsync -rc "$WORKSPACE_DIR" "tags/$VERSION/" --delete --delete-excluded
 
 echo "ls $SVN_DIR/tags"
