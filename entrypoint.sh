@@ -20,6 +20,14 @@ if [[ -z "$SVN_PASSWORD" ]]; then
 	exit 1
 fi
 
+# Set variables
+GENERATE_ZIP=false
+
+# Set options based on user input
+if [ -z "$1" ]; then
+  GENERATE_ZIP=$1;
+fi
+
 # Allow some ENV variables to be customized
 if [[ -z "$SLUG" ]]; then
 	SLUG=${GITHUB_REPOSITORY#*/}
@@ -54,7 +62,7 @@ if [[ -e "$GITHUB_WORKSPACE/.distignore" ]]; then
 	echo "ℹ︎ Using .distignore"
 	# Copy from current branch to /trunk, excluding dotorg assets
 	# The --delete flag will delete anything in destination that no longer exists in source
-	rsync -rc --exclude-from="$GITHUB_WORKSPACE/.distignore" "$GITHUB_WORKSPACE/" trunk/ --delete --delete-excluded 
+	rsync -rc --exclude-from="$GITHUB_WORKSPACE/.distignore" "$GITHUB_WORKSPACE/" trunk/ --delete --delete-excluded
 else
 	echo "ℹ︎ Using .gitattributes"
 
@@ -117,5 +125,14 @@ svn status
 
 echo "➤ Committing files..."
 svn commit -m "Update to version $VERSION from GitHub" --no-auth-cache --non-interactive  --username "$SVN_USERNAME" --password "$SVN_PASSWORD"
+
+if ! $GENERATE_ZIP; then
+  echo "Generating zip file..."
+  cd "$SVN_DIR/trunk" || exit
+  zip -r "${SLUG}.zip" "$SLUG/"
+  # Set GitHub "zip_path" output
+  echo "::set-output name=zip_path::$SVN_DIR/${SLUG}.zip"
+  echo "✓ Zip file generated!"
+fi
 
 echo "✓ Plugin deployed!"
