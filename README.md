@@ -51,7 +51,12 @@ If there are files or directories to be excluded from deployment, such as tests 
 ```
 
 
-## Example Workflow File
+## Example Workflow Files
+
+To get started, you will want to copy the contents of one of these examples into `.github/workflows/deploy.yml` and push that to your repository. You are welcome to name the file something else.
+
+### Deploy on pushing a new tag
+
 ```yml
 name: Deploy to WordPress.org
 on:
@@ -64,7 +69,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
-    - name: Build
+    - name: Build # Remove or modify this step as needed
       run: |
         npm install
         npm run build
@@ -73,7 +78,43 @@ jobs:
       env:
         SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
         SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
-        SLUG: my-super-cool-plugin
+        SLUG: my-super-cool-plugin # optional, remove if GitHub repo name matches SVN slug, including capitalization
+```
+
+### Deploy on publishing a new release and attach a ZIP file to the release
+```yml
+name: Deploy to WordPress.org
+on:
+  release:
+    types: [published]
+jobs:
+  tag:
+    name: New release
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Build
+      run: |
+        npm install
+        npm run build
+    - name: WordPress Plugin Deploy
+      id: deploy
+      uses: 10up/action-wordpress-plugin-deploy@master
+      with:
+        generate-zip: true
+      env:
+        SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+        SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+    - name: Upload release asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: ${{ steps.deploy.outputs.zip_path }}
+        asset_name: ${{ github.event.repository.name }}.zip
+        asset_content_type: application/zip
 ```
 
 ## Contributing
