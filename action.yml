@@ -5,9 +5,6 @@ inputs:
   generate-zip:
     description: 'Generate package zip file?'
     default: false
-outputs:
-  zip_path:
-    description: 'Zip file path'
 runs:
   using: 'docker'
   image: 'Dockerfile'

@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file, per [the Ke
 
 ## [Unreleased] - TBD
 
+## [1.5.0] - 2020-05-27
+### Added
+- Add optional ZIP file generation from SVN trunk to match content on WordPress.org. Props [@shivapoudel](https://github.com/shivapoudel) via [#37](https://github.com/10up/action-wordpress-plugin-deploy/pull/37).
+- Add example workflow file to attach the ZIP file to a GitHub release. Props [@helen](https://github.com/helen) via [#42](https://github.com/10up/action-wordpress-plugin-deploy/pull/42).
+- Set mime types on images in the SVN `assets` directory to prevent forced downloads on WordPress.org. Props [@nextgenthemes](https://github.com/nextgenthemes) via [#40](https://github.com/10up/action-wordpress-plugin-deploy/pull/40).
+
 ## [1.4.1] - 2020-03-12
 ### Fixed
 - Ensure previously committed files that are later added to `.distignore` get deleted. Props [@pascalknecht](https://github.com/pascalknecht) via [#26](https://github.com/10up/action-wordpress-plugin-deploy/pull/26).
