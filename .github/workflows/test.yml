@@ -14,6 +14,6 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@master
     - name: Shellcheck
       uses: ludeeus/action-shellcheck@master
