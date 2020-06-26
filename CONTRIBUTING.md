@@ -24,7 +24,7 @@ For more on how 10up writes and manages code, check out our [10up Engineering Be
 
 ## Workflow
 
-This repository currently uses the `develop` branch to reflect active work and `master` to represent the latest tagged release. Both should typically be usable and frequently the same, but we request that pull requests be opened against `develop` and usage of the action be against `master` or a specific tag. New releases will be tagged as updates are made.
+This repository currently uses the `develop` branch to reflect active work and `stable` to represent the latest tagged release. Both should typically be usable and frequently the same, but we request that pull requests be opened against `develop` and usage of the action be against `stable` or a specific tag. New releases will be tagged as updates are made.
 
 ## Release instructions
 

@@ -36,7 +36,7 @@ All notable changes to this project will be documented in this file, per [the Ke
 ### Fixed
 - Use more robust method of copying files (`-c` flag for `rsync`).
 
-[Unreleased]: https://github.com/10up/action-wordpress-plugin-deploy/compare/master...develop
+[Unreleased]: https://github.com/10up/action-wordpress-plugin-deploy/compare/stable...develop
 [1.4.1]: https://github.com/10up/action-wordpress-plugin-deploy/compare/1.4.0...1.4.1
 [1.4.0]: https://github.com/10up/action-wordpress-plugin-deploy/compare/1.3.0...1.4.0
 [1.3.0]: https://github.com/10up/action-wordpress-plugin-deploy/compare/1.2.1...1.3.0
