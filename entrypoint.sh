@@ -29,15 +29,15 @@ echo "ℹ︎ SLUG is $SLUG"
 if [[ -z "$ASSETS_DIR" ]]; then
 	ASSETS_DIR=".wordpress-org"
 fi
-echo "ℹ︎ ASSETS_DIR is $ASSETS_DIR"
 
-WORKSPACE_DIR="$GITHUB_WORKSPACE/wp-staging-svn/trunk/"
-echo "ℹ︎ WORKSPACE_DIR is $WORKSPACE_DIR"
+echo "ℹ︎ ASSETS_DIR: $ASSETS_DIR"
+echo "ℹ︎ WORKSPACE: $GITHUB_WORKSPACE"
 
+# Get the version from the tagged commit
 if [[ -z "$VERSION" ]]; then
 	VERSION=${GITHUB_REF##*/}
 fi
-echo "ℹ︎ VERSION is $VERSION"
+echo "ℹ︎ VERSION: $VERSION"
 
 SVN_URL="https://plugins.svn.wordpress.org/${SLUG}/"
 SVN_DIR="/github/svn-${SLUG}"
@@ -51,8 +51,8 @@ svn update --set-depth infinity assets
 svn update --set-depth infinity trunk
 
 echo "➤ Copying files..."
-rsync -rc "$WORKSPACE_DIR" "trunk/" --delete --delete-excluded
-rsync -rc "$WORKSPACE_DIR" "tags/$VERSION/" --delete --delete-excluded
+rsync -rc --exclude-from="$GITHUB_WORKSPACE/.distignore" "$GITHUB_WORKSPACE" "trunk/" --delete --delete-excluded
+rsync -rc --exclude-from="$GITHUB_WORKSPACE/.distignore" "$GITHUB_WORKSPACE" "tags/$VERSION/" --delete --delete-excluded
 
 echo "ls $SVN_DIR/tags"
 ls $SVN_DIR/tags
@@ -77,13 +77,9 @@ svn add . --force > /dev/null
 # Also suppress stdout here
 svn status | grep '^\!' | sed 's/! *//' | xargs -I% svn rm %@ > /dev/null
 
-# Copy tag locally to make this a single commit
-#echo "➤ Copying tag..."
-#svn cp "trunk" "tags/$VERSION"
-
 svn status
 
 echo "➤ Committing files..."
-svn commit -m "Update to version $VERSION from GitHub" --no-auth-cache --non-interactive  --username "$SVN_USERNAME" --password "$SVN_PASSWORD"
+#svn commit -m "Update to version $VERSION from GitHub" --no-auth-cache --non-interactive  --username "$SVN_USERNAME" --password "$SVN_PASSWORD"
 
 echo "✓ Plugin deployed!"
