@@ -62,6 +62,9 @@ cd "$SVN_DIR"
 svn update --set-depth infinity assets
 svn update --set-depth infinity trunk
 
+echo "➤ Current working directory"
+pwd
+
 echo "➤ Copying files..."
 if [[ -e "$GITHUB_WORKSPACE/.distignore" ]]; then
 	echo "ℹ︎ Using .distignore"
@@ -129,8 +132,10 @@ svn cp "trunk" "tags/$VERSION"
 
 # Fix screenshots getting force downloaded when clicking them
 # https://developer.wordpress.org/plugins/wordpress-org/plugin-assets/
-svn propset svn:mime-type image/png assets/*.png || true
-svn propset svn:mime-type image/jpeg assets/*.jpg || true
+if test -n "$(find . -maxdepth 1 -name 'glob*' -print -quit)"; then
+	svn propset svn:mime-type image/png assets/*.png || true
+	svn propset svn:mime-type image/jpeg assets/*.jpg || true
+fi
 
 svn status
 
