@@ -24,6 +24,8 @@ If there are files or directories to be excluded from deployment, such as tests 
 
 ### Sample baseline files
 
+> **Note:** The deploy to SVN uses `git archive HEAD`. It is therefore important that if you build files for release, you commit them to your repository. You do not have to push and store them in GitHub, but they need to be comitted to your git repo. This also means if you have the files in your `.gitignore`, you may need to force add them. before they are able to be comitted and sent via SVN to the WordPress plugin directory.
+
 #### `.distignore`
 
 **Notes:** `.distignore` is for files to be ignored **only**; it does not currently allow negation like `.gitignore`. This comes from its current expected syntax in WP-CLI's [`wp dist-archive` command](https://github.com/wp-cli/dist-archive-command/). It is possible that this Action will allow for includes via something like a `.distinclude` file in the future, or that WP-CLI itself makes a change that this Action will reflect for consistency. It also will need to contain more than `.gitattributes` because that method **also** respects `.gitignore`.
