@@ -82,6 +82,9 @@ jobs:
 ```
 
 ### Deploy on publishing a new release and attach a ZIP file to the release
+
+Note that this variant of attaching a ZIP file will **ONLY** work when triggering from a published release as seen in the example below.  It will **NOT** work if you're triggering from a tag as is done in the example above.
+
 ```yml
 name: Deploy to WordPress.org
 on:
