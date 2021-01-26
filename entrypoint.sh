@@ -111,11 +111,11 @@ fi
 # The force flag ensures we recurse into subdirectories even if they are already added
 # Suppress stdout in favor of svn status later for readability
 echo "➤ Preparing files..."
-svn add . --force > /dev/null
+svn add . --force --quiet
 
 # SVN delete all deleted files
 # Also suppress stdout here
-svn status | grep '^\!' | sed 's/! *//' | xargs -I% svn rm %@ > /dev/null
+svn status | grep '^\!' | sed 's/! *//' | xargs -I% svn rm %@ --quiet
 
 # Copy tag locally to make this a single commit
 echo "➤ Copying tag..."
