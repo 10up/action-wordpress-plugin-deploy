@@ -81,14 +81,50 @@ jobs:
         SLUG: my-super-cool-plugin # optional, remove if GitHub repo name matches SVN slug, including capitalization
 ```
 
+### Deploy on pushing a new tag and create release with attached ZIP
+
+```yml
+name: Deploy and Release Plugin
+on:
+  push:
+    tags:
+    - "*"
+jobs:
+  tag:
+    name: New tag
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Build
+      run: |
+        npm install
+        npm run build
+    - name: WordPress Plugin Deploy
+      id: deploy
+      uses: 10up/action-wordpress-plugin-deploy@stable
+      with:
+        generate-zip: true
+      env:
+        SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+        SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+    - name: Create GitHub release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: ${{github.workspace}}/${{ github.event.repository.name }}.zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```
+
 ### Deploy on publishing a new release and attach a ZIP file to the release
+
 ```yml
 name: Deploy to WordPress.org
 on:
   release:
     types: [published]
 jobs:
-  tag:
+  deploy:
     name: New release
     runs-on: ubuntu-latest
     steps:
