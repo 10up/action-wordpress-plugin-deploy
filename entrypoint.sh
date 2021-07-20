@@ -133,8 +133,9 @@ svn commit -m "Update to version $VERSION from GitHub" --no-auth-cache --non-int
 
 if ! $GENERATE_ZIP; then
   echo "Generating zip file..."
-  cd "$SVN_DIR/trunk" || exit
-  zip -r "${GITHUB_WORKSPACE}/${SLUG}.zip" .
+  mv "${SVN_DIR}/trunk" "${SVN_DIR}/${SLUG}"
+  cd $SVN_DIR
+  zip -r "${GITHUB_WORKSPACE}/${SLUG}.zip" $SLUG
   echo "✓ Zip file generated!"
 fi
 
