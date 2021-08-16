@@ -123,11 +123,16 @@ svn status
 echo "➤ Committing files..."
 svn commit -m "Update to version $VERSION from GitHub" --no-auth-cache --non-interactive  --username "$SVN_USERNAME" --password "$SVN_PASSWORD"
 
-if ! $INPUT_GENERATE_ZIP; then
+if $INPUT_GENERATE_ZIP; then
   echo "Generating zip file..."
+
+  # use a symbolic link so the directory in the zip matches the slug
+  ln -s "${SVN_DIR}/trunk" "{$SVN_DIR}/${SLUG}"
   mv "${SVN_DIR}/trunk" "${SVN_DIR}/${SLUG}"
-  cd $SVN_DIR
   zip -r "${GITHUB_WORKSPACE}/${SLUG}.zip" $SLUG
+  unlink "{$SVN_DIR}/${SLUG}"
+
+  echo "::set-output name=zip-path::$(echo ${GITHUB_WORKSPACE}/${SLUG}.zip)"
   echo "✓ Zip file generated!"
 fi
 
