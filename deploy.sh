@@ -20,14 +20,6 @@ if [[ -z "$SVN_PASSWORD" ]]; then
 	exit 1
 fi
 
-# Set variables
-GENERATE_ZIP=false
-
-# Set options based on user input
-if [ -z "$1" ]; then
-  GENERATE_ZIP=$1;
-fi
-
 # Allow some ENV variables to be customized
 if [[ -z "$SLUG" ]]; then
 	SLUG=${GITHUB_REPOSITORY#*/}
@@ -47,7 +39,7 @@ fi
 echo "ℹ︎ ASSETS_DIR is $ASSETS_DIR"
 
 SVN_URL="https://plugins.svn.wordpress.org/${SLUG}/"
-SVN_DIR="/github/svn-${SLUG}"
+SVN_DIR="${HOME}/svn-${SLUG}"
 
 # Checkout just trunk and assets for efficiency
 # Tagging will be handled on the SVN level
@@ -69,7 +61,7 @@ else
 	cd "$GITHUB_WORKSPACE"
 
 	# "Export" a cleaned copy to a temp directory
-	TMP_DIR="/github/archivetmp"
+	TMP_DIR="${HOME}/archivetmp"
 	mkdir "$TMP_DIR"
 
 	git config --global user.email "10upbot+github@10up.com"
@@ -131,10 +123,11 @@ svn status
 echo "➤ Committing files..."
 svn commit -m "Update to version $VERSION from GitHub" --no-auth-cache --non-interactive  --username "$SVN_USERNAME" --password "$SVN_PASSWORD"
 
-if ! $GENERATE_ZIP; then
+if $INPUT_GENERATE_ZIP; then
   echo "Generating zip file..."
   cd "$SVN_DIR/trunk" || exit
   zip -r "${GITHUB_WORKSPACE}/${SLUG}.zip" .
+  echo "::set-output name=zip-path::${GITHUB_WORKSPACE}/${SLUG}.zip"
   echo "✓ Zip file generated!"
 fi
 
