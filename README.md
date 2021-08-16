@@ -17,6 +17,12 @@ This Action commits the contents of your Git tag to the WordPress.org plugin rep
 * `VERSION` - defaults to the tag name; do not recommend setting this except for testing purposes.
 * `ASSETS_DIR` - defaults to `.wordpress-org`, customizable for other locations of WordPress.org plugin repository-specific assets that belong in the top-level `assets` directory (the one on the same level as `trunk`).
 
+### Inputs
+* `generate-zip` - Generate a ZIP file from the SVN `trunk` directory. Outputs a `zip-path` variable for use in further workflow steps. Defaults to false.
+
+### Outputs
+* `zip-path` - The path to the ZIP file generated if `generate-zip` is set to `true`. Fully qualified including the filename, intended for use in further workflow steps such as uploading release assets.
+
 ## Excluding files from deployment
 If there are files or directories to be excluded from deployment, such as tests or editor config files, they can be specified in either a `.distignore` file or a `.gitattributes` file using the `export-ignore` directive. If a `.distignore` file is present, it will be used; if not, the Action will look for a `.gitattributes` file and barring that, will write a basic temporary `.gitattributes` into place before proceeding so that no Git/GitHub-specific files are included.
 
@@ -112,7 +118,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ github.event.release.upload_url }}
-        asset_path: ${{github.workspace}}/${{ github.event.repository.name }}.zip
+        asset_path: ${{ steps.deploy.outputs.zip-path }}
         asset_name: ${{ github.event.repository.name }}.zip
         asset_content_type: application/zip
 ```
