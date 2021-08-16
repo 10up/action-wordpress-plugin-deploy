@@ -59,7 +59,7 @@ If there are files or directories to be excluded from deployment, such as tests 
 
 ## Example Workflow Files
 
-To get started, you will want to copy the contents of one of these examples into `.github/workflows/deploy.yml` and push that to your repository. You are welcome to name the file something else.
+To get started, you will want to copy the contents of one of these examples into `.github/workflows/deploy.yml` and push that to your repository. You are welcome to name the file something else, but it must be in that directory. The usage of `ubuntu-latest` is recommended for compatibility with required dependencies in this Action.
 
 ### Deploy on pushing a new tag
 
