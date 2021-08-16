@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file, per [the Ke
 
 ## [Unreleased] - TBD
 
+## [2.0.0] - 2021-08-16
+This is now a composite Action, meaning that it runs directly on the GitHub Actions runner rather than spinning up its own container and is significantly faster.
+
+### Added
+- Add `zip-path` output, as the `SLUG` may not match the repository name. Props [@ocean90](https://github.com/ocean90) via [#74](https://github.com/10up/action-wordpress-plugin-deploy/pull/74).
+
+### Fixed
+- Avoid a Debian image issue where the container could not be built. Props [@helen](https://github.com/helen) via [#74](https://github.com/10up/action-wordpress-plugin-deploy/pull/74).
+
 ## [1.5.0] - 2020-05-27
 ### Added
 - Add optional ZIP file generation from SVN trunk to match content on WordPress.org. Props [@shivapoudel](https://github.com/shivapoudel) via [#37](https://github.com/10up/action-wordpress-plugin-deploy/pull/37).
