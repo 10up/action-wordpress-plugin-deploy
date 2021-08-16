@@ -11,7 +11,7 @@ inputs:
 outputs:
   zip-path:
     description: 'Path to zip file'
-    value: ${{ steps.id.outputs.zip-path }}
+    value: ${{ steps.deploy.outputs.zip-path }}
 runs:
   using: 'composite'
   steps:
