@@ -123,10 +123,11 @@ svn status
 echo "➤ Committing files..."
 svn commit -m "Update to version $VERSION from GitHub" --no-auth-cache --non-interactive  --username "$SVN_USERNAME" --password "$SVN_PASSWORD"
 
-if ! $INPUT_GENERATE_ZIP; then
+if $INPUT_GENERATE_ZIP; then
   echo "Generating zip file..."
   cd "$SVN_DIR/trunk" || exit
   zip -r "${GITHUB_WORKSPACE}/${SLUG}.zip" .
+  echo "::set-output name=zip-path::$(echo ${GITHUB_WORKSPACE}/${SLUG}.zip)"
   echo "✓ Zip file generated!"
 fi
 

@@ -8,6 +8,10 @@ inputs:
   generate-zip:
     description: 'Generate package zip file?'
     default: false
+outputs:
+  zip-path:
+    description: 'Path to zip file'
+    value: ${{ steps.id.outputs.zip-path }}
 runs:
   using: 'composite'
   steps:
