@@ -39,7 +39,7 @@ fi
 echo "ℹ︎ ASSETS_DIR is $ASSETS_DIR"
 
 SVN_URL="https://plugins.svn.wordpress.org/${SLUG}/"
-SVN_DIR="/github/svn-${SLUG}"
+SVN_DIR="${HOME}/svn-${SLUG}"
 
 # Checkout just trunk and assets for efficiency
 # Tagging will be handled on the SVN level
@@ -61,7 +61,7 @@ else
 	cd "$GITHUB_WORKSPACE"
 
 	# "Export" a cleaned copy to a temp directory
-	TMP_DIR="/github/archivetmp"
+	TMP_DIR="${HOME}/archivetmp"
 	mkdir "$TMP_DIR"
 
 	git config --global user.email "10upbot+github@10up.com"
