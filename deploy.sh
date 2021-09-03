@@ -132,7 +132,7 @@ if $INPUT_GENERATE_ZIP; then
   zip -r "${GITHUB_WORKSPACE}/${SLUG}.zip" $SLUG
   unlink "{$SVN_DIR}/${SLUG}"
 
-  echo "::set-output name=zip-path::$(echo ${GITHUB_WORKSPACE}/${SLUG}.zip)"
+  echo "::set-output name=zip-path::${GITHUB_WORKSPACE}/${SLUG}.zip"
   echo "✓ Zip file generated!"
 fi
 
