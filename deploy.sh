@@ -129,7 +129,7 @@ if $INPUT_GENERATE_ZIP; then
   # use a symbolic link so the directory in the zip matches the slug
   ln -s "${SVN_DIR}/trunk" "{$SVN_DIR}/${SLUG}"
   mv "${SVN_DIR}/trunk" "${SVN_DIR}/${SLUG}"
-  zip -r "${GITHUB_WORKSPACE}/${SLUG}.zip" $SLUG
+  zip -r "${GITHUB_WORKSPACE}/${SLUG}.zip" "$SLUG"
   unlink "{$SVN_DIR}/${SLUG}"
 
   echo "::set-output name=zip-path::${GITHUB_WORKSPACE}/${SLUG}.zip"
