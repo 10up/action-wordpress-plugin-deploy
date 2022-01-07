@@ -3,6 +3,8 @@
 All notable changes to this project will be documented in this file, per [the Keep a Changelog standard](http://keepachangelog.com/).
 
 ## [Unreleased] - TBD
+### Added
+- Added mime type change to `image/gif` for `.gif` files.
 
 ## [2.0.0] - 2021-08-16
 This is now a composite Action, meaning that it runs directly on the GitHub Actions runner rather than spinning up its own container and is significantly faster.
