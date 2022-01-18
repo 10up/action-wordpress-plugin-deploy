@@ -118,6 +118,7 @@ svn cp "trunk" "tags/$VERSION"
 svn propset svn:mime-type image/png assets/*.png || true
 svn propset svn:mime-type image/jpeg assets/*.jpg || true
 svn propset svn:mime-type image/gif assets/*.gif || true
+svn propset svn:mime-type image/svg+xml assets/*.svg || true
 
 svn status
 
