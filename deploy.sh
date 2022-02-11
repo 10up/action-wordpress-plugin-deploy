@@ -41,7 +41,7 @@ echo "ℹ︎ ASSETS_DIR is $ASSETS_DIR"
 if [[ -z "$BUILD_DIR" ]]; then
 	BUILD_DIR=false
 elif [[ $BUILD_DIR != /* ]]; then 
-	BUILD_DIR="${GITHUB_WORKSPACE}/${BUILD_DIR}"
+	BUILD_DIR="${GITHUB_WORKSPACE%/}/${BUILD_DIR}"
 fi
 echo "ℹ︎ BUILD_DIR is $BUILD_DIR"
 
