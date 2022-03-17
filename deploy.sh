@@ -46,7 +46,7 @@ fi
 
 if [[ "$BUILD_DIR" != false ]]; then
 	if [[ $BUILD_DIR != /* ]]; then 
-		BUILD_DIR="${GITHUB_WORKSPACE%/}/${BUILD_DIR}"
+		BUILD_DIR="${GITHUB_WORKSPACE%/}/${BUILD_DIR%/}"
 	fi
 	echo "ℹ︎ BUILD_DIR is $BUILD_DIR"
 fi
@@ -108,7 +108,7 @@ if [[ "$BUILD_DIR" = false ]]; then
 	fi
 else
 	echo "ℹ︎ Copying files from build directory..."
-	rsync -rc "$BUILD_DIR" trunk/ --delete --delete-excluded
+	rsync -rc "$BUILD_DIR/" trunk/ --delete --delete-excluded
 fi
 
 # Copy dotorg assets to /assets
