@@ -56,7 +56,7 @@ This is now a composite Action, meaning that it runs directly on the GitHub Acti
 - Use more robust method of copying files (`-c` flag for `rsync`).
 
 [Unreleased]: https://github.com/10up/action-wordpress-plugin-deploy/compare/stable...develop
-[2.0.0]: https://github.com/10up/action-wordpress-plugin-deploy/compare/2.0.0...2.1.0
+[2.1.0]: https://github.com/10up/action-wordpress-plugin-deploy/compare/2.0.0...2.1.0
 [2.0.0]: https://github.com/10up/action-wordpress-plugin-deploy/compare/1.5.0...2.0.0
 [1.5.0]: https://github.com/10up/action-wordpress-plugin-deploy/compare/1.4.1...1.5.0
 [1.4.1]: https://github.com/10up/action-wordpress-plugin-deploy/compare/1.4.0...1.4.1
