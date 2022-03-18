@@ -3,8 +3,16 @@
 All notable changes to this project will be documented in this file, per [the Keep a Changelog standard](http://keepachangelog.com/).
 
 ## [Unreleased] - TBD
+
+
+## [2.1.0] - 2022-03-18
 ### Added
-- Added mime type change to `image/gif` for `.gif` files.
+- Added mime type change to `image/gif` for `.gif` files. Props [@doekenorg](https://github.com/doekenorg) via [#76](https://github.com/10up/action-wordpress-plugin-deploy/pull/76).
+- Added the new `BUILD_DIR` environment variable to deploy plugin files built into a custom directory. Props [@dinhtungdu](https://github.com/dinhtungdu) via [#83](https://github.com/10up/action-wordpress-plugin-deploy/pull/83) and [#86](https://github.com/10up/action-wordpress-plugin-deploy/pull/86).
+
+### Fixed
+- Set correct mime type for for `.svg` files. Props [@andrewheberle](https://github.com/andrewheberle) via [#78](https://github.com/10up/action-wordpress-plugin-deploy/pull/78).
+- Fix SVN error when plugin doesn't have any image. Props [@Lewiscowles1986](https://github.com/Lewiscowles1986) via [#82](https://github.com/10up/action-wordpress-plugin-deploy/pull/82).
 
 ## [2.0.0] - 2021-08-16
 This is now a composite Action, meaning that it runs directly on the GitHub Actions runner rather than spinning up its own container and is significantly faster.
@@ -48,6 +56,9 @@ This is now a composite Action, meaning that it runs directly on the GitHub Acti
 - Use more robust method of copying files (`-c` flag for `rsync`).
 
 [Unreleased]: https://github.com/10up/action-wordpress-plugin-deploy/compare/stable...develop
+[2.0.0]: https://github.com/10up/action-wordpress-plugin-deploy/compare/2.0.0...2.1.0
+[2.0.0]: https://github.com/10up/action-wordpress-plugin-deploy/compare/1.5.0...2.0.0
+[1.5.0]: https://github.com/10up/action-wordpress-plugin-deploy/compare/1.4.1...1.5.0
 [1.4.1]: https://github.com/10up/action-wordpress-plugin-deploy/compare/1.4.0...1.4.1
 [1.4.0]: https://github.com/10up/action-wordpress-plugin-deploy/compare/1.3.0...1.4.0
 [1.3.0]: https://github.com/10up/action-wordpress-plugin-deploy/compare/1.2.1...1.3.0
