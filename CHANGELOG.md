@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file, per [the Ke
 ## [Unreleased] - TBD
 
 
-## [2.1.0] - 2022-03-18
+## [2.1.0] - 2022-04-12
 ### Added
 - Mime type change to `image/gif` for `.gif` files (props [@doekenorg](https://github.com/doekenorg) via [#76](https://github.com/10up/action-wordpress-plugin-deploy/pull/76)).
 - Environment variable (`BUILD_DIR`) to deploy plugin files built into a custom directory (props [@dinhtungdu](https://github.com/dinhtungdu) via [#83](https://github.com/10up/action-wordpress-plugin-deploy/pull/83) and [#86](https://github.com/10up/action-wordpress-plugin-deploy/pull/86)).
