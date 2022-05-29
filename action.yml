@@ -8,6 +8,9 @@ inputs:
   generate-zip:
     description: 'Generate package zip file?'
     default: false
+  commit-message:
+    description: 'Use git last commit message if true, or "Update to version $VERSION from GitHub" if false else a resolvable command/text.'
+    default: false
 outputs:
   zip-path:
     description: 'Path to zip file'
@@ -18,5 +21,6 @@ runs:
     - id: deploy
       env:
         INPUT_GENERATE_ZIP: ${{ inputs.generate-zip }}
+        INPUT_COMMIT_MESSAGE: ${{ inputs.commit-message }}
       run: ${{ github.action_path }}/deploy.sh
       shell: bash
