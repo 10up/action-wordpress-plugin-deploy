@@ -155,8 +155,8 @@ if [[ "$INPUT_COMMIT_MESSAGE" != false ]]; then
 		#.git DIR still in place, so we should be able to retrieve the last message
 		MESSAGE=$(git -C "$GITHUB_WORKSPACE" log -1 --format=%s)
 	else
-		#resolve message, if required
-		MESSAGE=$($INPUT_COMMIT_MESSAGE)
+		#provided commit message
+		MESSAGE=$INPUT_COMMIT_MESSAGE
 	fi
 else
 	MESSAGE="Update to version $VERSION from GitHub"

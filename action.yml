@@ -9,7 +9,7 @@ inputs:
     description: 'Generate package zip file?'
     default: false
   commit-message:
-    description: 'Use git last commit message if true, or "Update to version $VERSION from GitHub" if false else a resolvable command/text.'
+    description: 'Use git last commit message if true, or "Update to version $VERSION from GitHub" if false else any text.'
     default: false
 outputs:
   zip-path:
