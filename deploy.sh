@@ -28,7 +28,12 @@ echo "ℹ︎ SLUG is $SLUG"
 
 # Does it even make sense for VERSION to be editable in a workflow definition?
 if [[ -z "$VERSION" ]]; then
-	VERSION="${GITHUB_REF#refs/tags/}"
+
+	if $VERSION_STABLE_TAG; then
+		VERSION=$(find . -iname "README.TXT" -exec grep -oiP -m 1 'stable\s+tag\s*:\s\K.*' {} \;)
+	else
+		VERSION="${GITHUB_REF#refs/tags/}"
+	fi
 	VERSION="${VERSION#v}"
 fi
 echo "ℹ︎ VERSION is $VERSION"

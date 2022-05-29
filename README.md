@@ -26,6 +26,7 @@ This Action commits the contents of your Git tag to the WordPress.org plugin rep
 
 ### Inputs
 * `generate-zip` - Generate a ZIP file from the SVN `trunk` directory. Outputs a `zip-path` variable for use in further workflow steps. Defaults to false.
+* `version-stable-tag` -  Use version from first matching `Stable tag` (case insensitive) in README.TXT (case insensitive) instead of release tag. Defaults to false.
 
 ### Outputs
 * `zip-path` - The path to the ZIP file generated if `generate-zip` is set to `true`. Fully qualified including the filename, intended for use in further workflow steps such as uploading release assets.
