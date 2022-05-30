@@ -147,6 +147,9 @@ if test -d "$SVN_DIR/assets" && test -n "$(find "$SVN_DIR/assets" -maxdepth 1 -n
     svn propset svn:mime-type "image/svg+xml" "$SVN_DIR/assets/*.svg" || true
 fi
 
+#Resolves => SVN commit failed: Directory out of date
+svn update
+
 svn status
 
 echo "➤ Committing files..."
