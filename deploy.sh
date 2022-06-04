@@ -150,7 +150,7 @@ fi
 svn status
 
 echo "➤ Committing files..."
-if [[ "$INPUT_COMMIT_MESSAGE" != false ]]; then
+if [[ "$INPUT_USE_COMMIT_MESSAGE" != false ]]; then
 	if [[ "$INPUT_COMMIT_MESSAGE" = true ]]; then
 		#.git DIR still in place, so we should be able to retrieve the last message
 		MESSAGE=$(git -C "$GITHUB_WORKSPACE" log -1 --format=%s)
