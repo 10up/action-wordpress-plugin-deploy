@@ -150,17 +150,20 @@ fi
 svn status
 
 echo "➤ Committing files..."
-if [[ "$INPUT_USE_COMMIT_MESSAGE" != false ]]; then
-	if [[ "$INPUT_COMMIT_MESSAGE" = true ]]; then
+case $INPUT_USE_COMMIT_MESSAGE in
+	true)
 		#.git DIR still in place, so we should be able to retrieve the last message
 		MESSAGE=$(git -C "$GITHUB_WORKSPACE" log -1 --format=%s)
-	else
+		;;
+	false)
+		MESSAGE="Update to version $VERSION from GitHub"
+		;;
+	*)
 		#provided commit message
-		MESSAGE=$INPUT_COMMIT_MESSAGE
-	fi
-else
-	MESSAGE="Update to version $VERSION from GitHub"
-fi
+		MESSAGE=$INPUT_USE_COMMIT_MESSAGE
+		;;
+esac
+
 svn commit -m "$MESSAGE" --no-auth-cache --non-interactive  --username "$SVN_USERNAME" --password "$SVN_PASSWORD"
 
 if $INPUT_GENERATE_ZIP; then

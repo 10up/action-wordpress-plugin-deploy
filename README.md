@@ -26,7 +26,10 @@ This Action commits the contents of your Git tag to the WordPress.org plugin rep
 
 ### Inputs
 * `generate-zip` - Generate a ZIP file from the SVN `trunk` directory. Outputs a `zip-path` variable for use in further workflow steps. Defaults to false.
-* `use-commit-message` -  Use the latest git commit message as the svn commit message, otherwise use "Update to version $VERSION from GitHub". Defaults to false.
+* `use-commit-message` - Accepts either a boolean or text value, Defaults to false.
+  - `true` : Will use the last Git Commit message.
+  - `false` : Will use "Update to version $VERSION from GitHub"
+  - `text` : Any text value to be used as the commit message. Useful for when you want to dynamically generate the commit message.
 
 ### Outputs
 * `zip-path` - The path to the ZIP file generated if `generate-zip` is set to `true`. Fully qualified including the filename, intended for use in further workflow steps such as uploading release assets.
