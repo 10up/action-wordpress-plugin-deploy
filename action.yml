@@ -21,6 +21,6 @@ runs:
     - id: deploy
       env:
         INPUT_GENERATE_ZIP: ${{ inputs.generate-zip }}
-        INPUT_COMMIT_MESSAGE: ${{ inputs.commit-message }}
+        INPUT_USE_COMMIT_MESSAGE: ${{ inputs.use-commit-message }}
       run: ${{ github.action_path }}/deploy.sh
       shell: bash
