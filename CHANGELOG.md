@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file, per [the Ke
 
 ## [Unreleased] - TBD
 
+## [2.1.1] - 2022-08-15
+### Fixed
+- Resolve SVN commit failed: Directory out of date (props [@dinhtungdu](https://github.com/dinhtungdu), [@richard-muvirimi](https://github.com/richard-muvirimi) via [#96](https://github.com/10up/action-wordpress-plugin-deploy/pull/96))
+- Failure to set assets mime-type with `svn propset` (props [@diddledani](https://github.com/diddledani), [@dinhtungdu](https://github.com/dinhtungdu) via [#99](https://github.com/10up/action-wordpress-plugin-deploy/pull/99))
 
 ## [2.1.0] - 2022-04-12
 ### Added
