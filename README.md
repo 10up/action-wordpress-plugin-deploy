@@ -49,6 +49,7 @@ If there are files or directories to be excluded from deployment, such as tests 
 
 .distignore
 .gitignore
+.gitattributes
 ```
 
 #### `.gitattributes`
