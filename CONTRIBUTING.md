@@ -28,6 +28,6 @@ This repository currently uses the `develop` branch to reflect active work and `
 
 ## Release instructions
 
-1. [Create a new release](https://github.com/10up/action-wordpress-plugin-deploy/releases/new)
-2. Ensure it appears in the GitHub Marketplace correctly
-3. Celebrate shipping!
+A new release pull requestwill be created automatically once a branch named `release/X.Y.Z` is pushed to GitHub.
+
+The step by step release instructions can be found in [.github/release-pull-request-template.md](.github/release-pull-request-template.md).
