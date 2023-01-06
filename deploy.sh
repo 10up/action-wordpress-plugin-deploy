@@ -159,9 +159,9 @@ if $INPUT_GENERATE_ZIP; then
   echo "Generating zip file..."
 
   # use a symbolic link so the directory in the zip matches the slug
-  ln -s "${SVN_DIR}/trunk" "{$SVN_DIR}/${SLUG}"
+  ln -s "${SVN_DIR}/trunk" "${SVN_DIR}/${SLUG}"
   zip -r "${GITHUB_WORKSPACE}/${SLUG}.zip" "$SLUG"
-  unlink "{$SVN_DIR}/${SLUG}"
+  unlink "${SVN_DIR}/${SLUG}"
 
   echo "zip-path=${GITHUB_WORKSPACE}/${SLUG}.zip" >> "${GITHUB_OUTPUT}"
   echo "✓ Zip file generated!"
