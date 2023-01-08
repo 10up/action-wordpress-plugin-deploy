@@ -70,32 +70,32 @@ if [[ "$BUILD_DIR" != false ]]; then
 fi
 
 echo "i Retrieving current WordPress version from wordpress.org"
-wget http://api.wordpress.org/core/stable-check/1.0/ -O stable.check.txt
+STABLECHECK=`mktemp`
+wget http://api.wordpress.org/core/stable-check/1.0/ -O $STABLECHECK
 
-# Get the second last line of the file.
-tail -n 2 stable.check.txt > stable.tail.txt
-head -n 1 stable.tail.txt > stable.txt
+# Get the "latest" version of WordPress from the file.
+grep '"latest"' stable.check.txt > $STABLECHECK
 
 # Strip out the status.
-sed -i 's/ : "latest"//' stable.txt
+sed -i 's/ : "latest"//' $STABLECHECK
 
 # Get rid of the quotes, tabs, and spaces.
-sed -i 's/["\t\s]//g' stable.txt
+sed -i 's/["\t\s]//g' $STABLECHECK
 
 # Now cut down any 3 part versions, like 6.1.1, to two parts, aka 6.1.
-sed -i 's/\([0-9]*\)\.\([0-9]*\)\.[0-9]*/\1.\2/' stable.txt
+sed -i 's/\([0-9]*\)\.\([0-9]*\)\.[0-9]*/\1.\2/' $STABLECHECK
 
 # Store it in a variable and delete the temp files.
-WP_VERSION=$(<stable.txt)
-rm stable*.txt
-
-echo "i WP_VERSION is $WP_VERSION"
+WP_VERSION=$(<$STABLECHECK)
+rm $STABLECHECK
 
 NEED_COMMIT=""
 
 if [ -z "$WP_VERSION" ]; then
 	echo "e could not retrieve current WordPress version from wordpress.org"
 else
+	echo "i WP_VERSION is $WP_VERSION"
+
 	# Do a grep on the readme.txt file to see if the values already set correctly.
 	README_VERSION=`grep "^Tested up to: $WP_VERSION" ${GITHUB_WORKSPACE}/readme.txt`
 
