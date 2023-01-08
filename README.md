@@ -16,6 +16,8 @@ This Action commits the contents of your Git tag to the WordPress.org plugin rep
 
 * `SVN_USERNAME`
 * `SVN_PASSWORD`
+* `GIT_USERNAME`
+* `GIT_EMAIL`
 
 [Secrets are set in your repository settings](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/creating-and-using-encrypted-secrets). They cannot be viewed once stored.
 
@@ -96,6 +98,8 @@ jobs:
       env:
         SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
         SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+        GIT_EMAIL: ${{ secrets.GIT_EMAIL }}
+        GIT_USERNAME: ${{ secrets.GIT_USERNAME }}
         SLUG: my-super-cool-plugin # optional, remove if GitHub repo name matches SVN slug, including capitalization
 ```
 
@@ -125,6 +129,8 @@ jobs:
       env:
         SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
         SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+        GIT_EMAIL: ${{ secrets.GIT_EMAIL }}
+        GIT_USERNAME: ${{ secrets.GIT_USERNAME }}
     - name: Upload release asset
       uses: actions/upload-release-asset@v1
       env:
