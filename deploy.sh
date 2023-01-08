@@ -20,6 +20,20 @@ if [[ -z "$SVN_PASSWORD" ]]; then
 	exit 1
 fi
 
+if [ -z "$GIT_USERNAME" ]; then
+	echo "Set the GIT_USERNAME secret"
+	exit 1
+fi
+
+if [ -z "$GIT_EMAIL" ]; then
+	echo "Set the GIT_EMAIL secret"
+	exit 1
+fi
+
+echo "i Configuring GIT"
+git config --global user.name "$GIT_USERNAME"
+git config --global user.email "$GIT_EMAIL"
+
 if $INPUT_DRY_RUN; then
 	echo "ℹ︎ Dry run: No files will be committed to Subversion."
 fi
@@ -44,15 +58,85 @@ echo "ℹ︎ ASSETS_DIR is $ASSETS_DIR"
 
 if [[ -z "$BUILD_DIR" ]] || [[ $BUILD_DIR == "./" ]]; then
 	BUILD_DIR=false
-elif [[ $BUILD_DIR == ./* ]]; then 
+elif [[ $BUILD_DIR == ./* ]]; then
 	BUILD_DIR=${BUILD_DIR:2}
 fi
 
 if [[ "$BUILD_DIR" != false ]]; then
-	if [[ $BUILD_DIR != /* ]]; then 
+	if [[ $BUILD_DIR != /* ]]; then
 		BUILD_DIR="${GITHUB_WORKSPACE%/}/${BUILD_DIR%/}"
 	fi
 	echo "ℹ︎ BUILD_DIR is $BUILD_DIR"
+fi
+
+echo "i Retrieving current WordPress version from wordpress.org"
+wget http://api.wordpress.org/core/stable-check/1.0/ -O stable.check.txt
+
+# Get the second last line of the file.
+tail -n 2 stable.check.txt > stable.tail.txt
+head -n 1 stable.tail.txt > stable.txt
+
+# Strip out the status.
+sed -i 's/ : "latest"//' stable.txt
+
+# Get rid of the quotes, tabs, and spaces.
+sed -i 's/["\t\s]//g' stable.txt
+
+# Now cut down any 3 part versions, like 6.1.1, to two parts, aka 6.1.
+sed -i 's/\([0-9]*\)\.\([0-9]*\)\.[0-9]*/\1.\2/' stable.txt
+
+# Store it in a variable and delete the temp files.
+WP_VERSION=$(<stable.txt)
+rm stable*.txt
+
+echo "i WP_VERSION is $WP_VERSION"
+
+NEED_COMMIT=""
+
+if [ -z "$WP_VERSION" ]; then
+	echo "e could not retrieve current WordPress version from wordpress.org"
+else
+	# Do a grep on the readme.txt file to see if the values already set correctly.
+	README_VERSION=`grep "^Tested up to: $WP_VERSION" ${GITHUB_WORKSPACE}/readme.txt`
+
+	# Check to see if the tested up to value needs to be updated in the readme.txt.
+	if [ ! -z "$README_VERSION" ]; then
+		echo "i Tested up to in the readme.txt is up to date"
+	else
+		# Replace the strings in the readme.txt.
+		echo "i Updating Tested up to in readme.txt..."
+		sed -i "s/^Tested up to: .*/Tested up to: $WP_VERSION/" ${GITHUB_WORKSPACE}/readme.txt
+
+		NEED_COMMIT="yes"
+	fi
+fi
+
+# Do a grep on the readme.txt file to see if the values already set correctly.
+README_TAG=`grep "^Stable tag: $VERSION" ${GITHUB_WORKSPACE}/readme.txt`
+
+# Check to see if the stable tag value needs to be updated in the readme.txt.
+if [ ! -z "$README_TAG" ]; then
+	echo "i Stable tag in the readme.txt is up to date"
+else
+	# Replace the strings in the readme.txt.
+	echo "i Updating Stable tag in readme.txt..."
+	sed -i "s/^Stable tag: .*/Stable tag: $VERSION/" ${GITHUB_WORKSPACE}/readme.txt
+
+	NEED_COMMIT="yes"
+fi
+
+if [ ! -z "$NEED_COMMIT" ]; then
+	# Display out the first 10 lines of the new readme.txt for logging.
+	echo "i First ten lines of new readme.txt look like this:"
+	head -n 10 ${GITHUB_WORKSPACE}/readme.txt
+
+	echo "i Committing readme.txt changes to GIT..."
+	git commit -am "Update Tested up to value in readme.txt"
+	git push
+
+	echo "i Updating tag to include changes..."
+	git tag -f $VERSION
+	git push --force origin $VERSION
 fi
 
 SVN_URL="https://plugins.svn.wordpress.org/${SLUG}/"
