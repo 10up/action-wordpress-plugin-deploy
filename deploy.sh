@@ -131,7 +131,7 @@ if [ ! -z "$NEED_COMMIT" ]; then
 	head -n 10 ${GITHUB_WORKSPACE}/readme.txt
 
 	echo "i Committing readme.txt changes to GIT..."
-	git commit -am "Update Tested up to value in readme.txt"
+	git commit -am "Update readme.txt for release $VERSION."
 	git push
 
 	echo "i Updating tag to include changes..."
