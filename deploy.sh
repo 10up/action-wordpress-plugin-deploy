@@ -69,74 +69,88 @@ if [[ "$BUILD_DIR" != false ]]; then
 	echo "ℹ︎ BUILD_DIR is $BUILD_DIR"
 fi
 
-echo "i Retrieving current WordPress version from wordpress.org"
-STABLECHECK=`mktemp`
-wget http://api.wordpress.org/core/stable-check/1.0/ -O $STABLECHECK
-
-# Get the "latest" version of WordPress from the file.
-grep '"latest"' stable.check.txt > $STABLECHECK
-
-# Strip out the status.
-sed -i 's/ : "latest"//' $STABLECHECK
-
-# Get rid of the quotes, tabs, and spaces.
-sed -i 's/["\t\s]//g' $STABLECHECK
-
-# Now cut down any 3 part versions, like 6.1.1, to two parts, aka 6.1.
-sed -i 's/\([0-9]*\)\.\([0-9]*\)\.[0-9]*/\1.\2/' $STABLECHECK
-
-# Store it in a variable and delete the temp files.
-WP_VERSION=$(<$STABLECHECK)
-rm $STABLECHECK
-
 NEED_COMMIT=""
 
-if [ -z "$WP_VERSION" ]; then
-	echo "e could not retrieve current WordPress version from wordpress.org"
+if [ ! -z "$SKIP_WP_VERSION"]; then
+	echo "i Skipping update of Tested up to value"
 else
-	echo "i WP_VERSION is $WP_VERSION"
+	echo "i Retrieving current WordPress version from wordpress.org"
+	STABLECHECK=`mktemp`
+	wget http://api.wordpress.org/core/stable-check/1.0/ -O $STABLECHECK
 
+	# Get the "latest" version of WordPress from the file.
+	grep '"latest"' stable.check.txt > $STABLECHECK
+
+	# Strip out the status.
+	sed -i 's/ : "latest"//' $STABLECHECK
+
+	# Get rid of the quotes, tabs, and spaces.
+	sed -i 's/["\t\s]//g' $STABLECHECK
+
+	# Now cut down any 3 part versions, like 6.1.1, to two parts, aka 6.1.
+	sed -i 's/\([0-9]*\)\.\([0-9]*\)\.[0-9]*/\1.\2/' $STABLECHECK
+
+	# Store it in a variable and delete the temp files.
+	WP_VERSION=$(<$STABLECHECK)
+	rm $STABLECHECK
+
+	if [ -z "$WP_VERSION" ]; then
+		echo "e could not retrieve current WordPress version from wordpress.org"
+	else
+		echo "i WP_VERSION is $WP_VERSION"
+
+		# Do a grep on the readme.txt file to see if the values already set correctly.
+		README_VERSION=`grep "^Tested up to: $WP_VERSION" ${GITHUB_WORKSPACE}/readme.txt`
+
+		# Check to see if the tested up to value needs to be updated in the readme.txt.
+		if [ ! -z "$README_VERSION" ]; then
+			echo "i Tested up to in the readme.txt is up to date"
+		else
+			# Replace the strings in the readme.txt.
+			echo "i Updating Tested up to in readme.txt..."
+			sed -i "s/^Tested up to: .*/Tested up to: $WP_VERSION/" ${GITHUB_WORKSPACE}/readme.txt
+
+			NEED_COMMIT="yes"
+		fi
+	fi
+fi
+
+if [ ! -z "$SKIP_STABLE_TAG"]; then
+	echo "i Skipping update of Stable tag value"
+else
 	# Do a grep on the readme.txt file to see if the values already set correctly.
-	README_VERSION=`grep "^Tested up to: $WP_VERSION" ${GITHUB_WORKSPACE}/readme.txt`
+	README_TAG=`grep "^Stable tag: $VERSION" ${GITHUB_WORKSPACE}/readme.txt`
 
-	# Check to see if the tested up to value needs to be updated in the readme.txt.
-	if [ ! -z "$README_VERSION" ]; then
-		echo "i Tested up to in the readme.txt is up to date"
+	# Check to see if the stable tag value needs to be updated in the readme.txt.
+	if [ ! -z "$README_TAG" ]; then
+		echo "i Stable tag in the readme.txt is up to date"
 	else
 		# Replace the strings in the readme.txt.
-		echo "i Updating Tested up to in readme.txt..."
-		sed -i "s/^Tested up to: .*/Tested up to: $WP_VERSION/" ${GITHUB_WORKSPACE}/readme.txt
+		echo "i Updating Stable tag in readme.txt..."
+		sed -i "s/^Stable tag: .*/Stable tag: $VERSION/" ${GITHUB_WORKSPACE}/readme.txt
 
 		NEED_COMMIT="yes"
 	fi
 fi
 
-# Do a grep on the readme.txt file to see if the values already set correctly.
-README_TAG=`grep "^Stable tag: $VERSION" ${GITHUB_WORKSPACE}/readme.txt`
-
-# Check to see if the stable tag value needs to be updated in the readme.txt.
-if [ ! -z "$README_TAG" ]; then
-	echo "i Stable tag in the readme.txt is up to date"
+if [ ! -z "$SKIP_GIT_COMMIT"]; then
+	echo "i Skipping git commit"
 else
-	# Replace the strings in the readme.txt.
-	echo "i Updating Stable tag in readme.txt..."
-	sed -i "s/^Stable tag: .*/Stable tag: $VERSION/" ${GITHUB_WORKSPACE}/readme.txt
+	if [ ! -z "$NEED_COMMIT" ]; then
+		# Display out the first 10 lines of the new readme.txt for logging.
+		echo "i First ten lines of new readme.txt look like this:"
+		head -n 10 ${GITHUB_WORKSPACE}/readme.txt
 
-	NEED_COMMIT="yes"
-fi
+		echo "i Committing readme.txt changes to GIT..."
+		git commit -am "Update readme.txt for release $VERSION."
+		git push
 
-if [ ! -z "$NEED_COMMIT" ]; then
-	# Display out the first 10 lines of the new readme.txt for logging.
-	echo "i First ten lines of new readme.txt look like this:"
-	head -n 10 ${GITHUB_WORKSPACE}/readme.txt
-
-	echo "i Committing readme.txt changes to GIT..."
-	git commit -am "Update readme.txt for release $VERSION."
-	git push
-
-	echo "i Updating tag to include changes..."
-	git tag -f $VERSION
-	git push --force origin $VERSION
+		echo "i Updating tag to include changes..."
+		git tag -f $VERSION
+		git push --force origin $VERSION
+	else
+		echo "i No changes need to be commited to the git repo"
+	fi
 fi
 
 SVN_URL="https://plugins.svn.wordpress.org/${SLUG}/"
