@@ -1,0 +1,6 @@
+# These owners will be the default owners for everything in the repo. Unless a later match takes precedence, @10up/open-source-practice, as primary maintainers will be requested for review when someone opens a Pull Request.
+*                   @10up/open-source-practice
+
+# GitHub specifics
+/.github/           @jeffpaul
+LICENSE             @jeffpaul
