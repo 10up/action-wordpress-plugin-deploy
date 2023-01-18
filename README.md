@@ -1,10 +1,10 @@
-# WordPress.org Plugin Deploy
+# WordPress.org Theme Deploy
 
-> Deploy your plugin to the WordPress.org repository using GitHub Actions.
+> Deploy your theme to the WordPress.org repository using GitHub Actions.
 
 [![Support Level](https://img.shields.io/badge/support-active-green.svg)](#support-level) [![Release Version](https://img.shields.io/github/release/10up/action-wordpress-plugin-deploy.svg)](https://github.com/10up/action-wordpress-plugin-deploy/releases/latest) [![MIT License](https://img.shields.io/github/license/10up/action-wordpress-plugin-deploy.svg)](https://github.com/10up/action-wordpress-plugin-deploy/blob/develop/LICENSE)
 
-This Action commits the contents of your Git tag to the WordPress.org plugin repository using the same tag name. It can exclude files as defined in either `.distignore` or `.gitattributes`, and moves anything from a `.wordpress-org` subdirectory to the top-level `assets` directory in Subversion (plugin banners, icons, and screenshots).
+This Action commits the contents of your Git tag to the WordPress.org themes repository using the same tag name. It can exclude files as defined in either `.distignore` or `.gitattributes`, and moves anything from a `.wordpress-org` subdirectory to the top-level `assets` directory in Subversion (plugin banners, icons, and screenshots).
 
 ### ☞ For updating the readme and items in the assets directory between releases, please see our [WordPress.org Plugin Readme/Assets Update Action](https://github.com/10up/action-wordpress-plugin-asset-update)
 
