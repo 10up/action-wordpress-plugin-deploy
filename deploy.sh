@@ -104,19 +104,19 @@ if [[ "$BUILD_DIR" = false ]]; then
 
 		# Copy from clean copy to /trunk, excluding dotorg assets
 		# The --delete flag will delete anything in destination that no longer exists in source
-		rsync -rc "$TMP_DIR/" trunk/ --delete --delete-excluded
+		rsync -rc "$TMP_DIR/" "$VERSION"/ --delete --delete-excluded
 	fi
 else
 	echo "ℹ︎ Copying files from build directory..."
-	rsync -rc "$BUILD_DIR/" trunk/ --delete --delete-excluded
+	rsync -rc "$BUILD_DIR/" "$VERSION"/ --delete --delete-excluded
 fi
 
 # Copy dotorg assets to /assets
-if [[ -d "$GITHUB_WORKSPACE/$ASSETS_DIR/" ]]; then
-	rsync -rc "$GITHUB_WORKSPACE/$ASSETS_DIR/" assets/ --delete
-else
-	echo "ℹ︎ No assets directory found; skipping asset copy"
-fi
+#if [[ -d "$GITHUB_WORKSPACE/$ASSETS_DIR/" ]]; then
+#	rsync -rc "$GITHUB_WORKSPACE/$ASSETS_DIR/" assets/ --delete
+#else
+#	echo "ℹ︎ No assets directory found; skipping asset copy"
+#fi
 
 # Add everything and commit to SVN
 # The force flag ensures we recurse into subdirectories even if they are already added
@@ -130,10 +130,10 @@ svn status | grep '^\!' | sed 's/! *//' | xargs -I% svn rm %@ > /dev/null
 
 # Copy tag locally to make this a single commit
 echo "➤ Copying tag..."
-svn cp "trunk" "$VERSION"
-svn remove "trunk"
-rm -R __MACOSX
-rm -R "trunk"
+#svn cp "trunk" "$VERSION"
+#svn remove "trunk"
+#rm -R __MACOSX
+#rm -R "trunk"
 
 # Fix screenshots getting force downloaded when clicking them
 # https://developer.wordpress.org/plugins/wordpress-org/plugin-assets/
