@@ -130,22 +130,22 @@ svn status | grep '^\!' | sed 's/! *//' | xargs -I% svn rm %@ > /dev/null
 
 # Copy tag locally to make this a single commit
 echo "➤ Copying tag..."
-svn cp "trunk" "tags/$VERSION"
+svn cp "trunk" "$VERSION"
 
 # Fix screenshots getting force downloaded when clicking them
 # https://developer.wordpress.org/plugins/wordpress-org/plugin-assets/
-if test -d "$SVN_DIR/assets" && test -n "$(find "$SVN_DIR/assets" -maxdepth 1 -name "*.png" -print -quit)"; then
-    svn propset svn:mime-type "image/png" "$SVN_DIR/assets/"*.png || true
-fi
-if test -d "$SVN_DIR/assets" && test -n "$(find "$SVN_DIR/assets" -maxdepth 1 -name "*.jpg" -print -quit)"; then
-    svn propset svn:mime-type "image/jpeg" "$SVN_DIR/assets/"*.jpg || true
-fi
-if test -d "$SVN_DIR/assets" && test -n "$(find "$SVN_DIR/assets" -maxdepth 1 -name "*.gif" -print -quit)"; then
-    svn propset svn:mime-type "image/gif" "$SVN_DIR/assets/"*.gif || true
-fi
-if test -d "$SVN_DIR/assets" && test -n "$(find "$SVN_DIR/assets" -maxdepth 1 -name "*.svg" -print -quit)"; then
-    svn propset svn:mime-type "image/svg+xml" "$SVN_DIR/assets/"*.svg || true
-fi
+#if test -d "$SVN_DIR/assets" && test -n "$(find "$SVN_DIR/assets" -maxdepth 1 -name "*.png" -print -quit)"; then
+#    svn propset svn:mime-type "image/png" "$SVN_DIR/assets/"*.png || true
+#fi
+#if test -d "$SVN_DIR/assets" && test -n "$(find "$SVN_DIR/assets" -maxdepth 1 -name "*.jpg" -print -quit)"; then
+#    svn propset svn:mime-type "image/jpeg" "$SVN_DIR/assets/"*.jpg || true
+#fi
+#if test -d "$SVN_DIR/assets" && test -n "$(find "$SVN_DIR/assets" -maxdepth 1 -name "*.gif" -print -quit)"; then
+#    svn propset svn:mime-type "image/gif" "$SVN_DIR/assets/"*.gif || true
+#fi
+#if test -d "$SVN_DIR/assets" && test -n "$(find "$SVN_DIR/assets" -maxdepth 1 -name "*.svg" -print -quit)"; then
+#    svn propset svn:mime-type "image/svg+xml" "$SVN_DIR/assets/"*.svg || true
+#fi
 
 #Resolves => SVN commit failed: Directory out of date
 svn update
