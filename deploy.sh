@@ -131,6 +131,9 @@ svn status | grep '^\!' | sed 's/! *//' | xargs -I% svn rm %@ > /dev/null
 # Copy tag locally to make this a single commit
 echo "➤ Copying tag..."
 svn cp "trunk" "$VERSION"
+svn remove "trunk"
+rm -R __MACOSX
+rm -R "trunk"
 
 # Fix screenshots getting force downloaded when clicking them
 # https://developer.wordpress.org/plugins/wordpress-org/plugin-assets/
