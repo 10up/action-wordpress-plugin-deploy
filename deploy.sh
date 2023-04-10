@@ -26,7 +26,7 @@ if [[ -z "$SLUG" ]]; then
 fi
 echo "ℹ︎ SLUG is $SLUG"
 
-# Does it even make sense for VERSION to be editable in a workflow definition?
+# Allow setting custom version number in advanced workflows
 if [[ -z "$VERSION" ]]; then
 	VERSION="${GITHUB_REF#refs/tags/}"
 	VERSION="${VERSION#v}"
