@@ -152,8 +152,12 @@ svn update
 
 svn status
 
-echo "➤ Committing files..."
-svn commit -m "Update to version $VERSION from GitHub" --no-auth-cache --non-interactive  --username "$SVN_USERNAME" --password "$SVN_PASSWORD"
+if [[ "$DEBUG" != false ]]; then
+  echo "➤ Committing files..."
+  svn commit -m "Update to version $VERSION from GitHub" --no-auth-cache --non-interactive  --username "$SVN_USERNAME" --password "$SVN_PASSWORD"
+else
+  echo "➤ Debug mode: Files not committed."
+fi
 
 if $INPUT_GENERATE_ZIP; then
   echo "Generating zip file..."
