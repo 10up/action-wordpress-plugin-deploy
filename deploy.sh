@@ -20,7 +20,7 @@ if [[ -z "$SVN_PASSWORD" ]]; then
 	exit 1
 fi
 
-if $DRY_RUN; then
+if $INPUT_DRY_RUN; then
 	echo "ℹ︎ Dry run: no files will be committed to subversion."
 fi
 
@@ -156,7 +156,7 @@ svn update
 
 svn status
 
-if $DRY_RUN; then
+if $INPUT_DRY_RUN; then
   echo "➤ Dry run: Files not committed."
 else
   echo "➤ Committing files..."
