@@ -20,13 +20,8 @@ if [[ -z "$SVN_PASSWORD" ]]; then
 	exit 1
 fi
 
-# Check if the DRY_RUN ENV variable is set, otherwise set it to false.
-if [[ -z "$DRY_RUN" ]]; then
-	DRY_RUN=false;
-fi
-
-if [[ "$DRY_RUN" == true ]]; then
-	echo "ℹ︎ DRY_RUN is true"
+if $DRY_RUN; then
+	echo "ℹ︎ Dry run: no files will be committed to subversion."
 fi
 
 # Allow some ENV variables to be customized
@@ -161,8 +156,8 @@ svn update
 
 svn status
 
-if [[ "$DRY_RUN" == true ]]; then
-  echo "➤ Debug mode: Files not committed."
+if $DRY_RUN; then
+  echo "➤ Dry run: Files not committed."
 else
   echo "➤ Committing files..."
   svn commit -m "Update to version $VERSION from GitHub" --no-auth-cache --non-interactive  --username "$SVN_USERNAME" --password "$SVN_PASSWORD"
