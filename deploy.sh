@@ -60,7 +60,7 @@ svn checkout --depth immediates "$SVN_URL" "$SVN_DIR"
 cd "$SVN_DIR"
 svn update --set-depth infinity assets
 svn update --set-depth infinity trunk
-svn update --set-depth infinity tags
+svn update --set-depth immediates tags
 
 # Bail early if the plugin version is already published.
 if [[ -d "tags/$VERSION" ]]; then
