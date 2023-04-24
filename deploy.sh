@@ -58,14 +58,19 @@ fi
 SVN_URL="https://plugins.svn.wordpress.org/${SLUG}/"
 SVN_DIR="${HOME}/svn-${SLUG}"
 
-# Checkout just trunk and assets for efficiency
-# Tagging will be handled on the SVN level
+# Checkout SVN repository.
 echo "➤ Checking out .org repository..."
 svn checkout --depth immediates "$SVN_URL" "$SVN_DIR"
 cd "$SVN_DIR"
 svn update --set-depth infinity assets
 svn update --set-depth infinity trunk
+svn update --set-depth immediates tags
 
+# Bail early if the plugin version is already published.
+if [[ -d "tags/$VERSION" ]]; then
+	echo "ℹ︎ Version $VERSION of plugin $SLUG was already published";
+	exit
+fi
 
 if [[ "$BUILD_DIR" = false ]]; then
 	echo "➤ Copying files..."
