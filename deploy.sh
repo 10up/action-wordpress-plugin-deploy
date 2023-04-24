@@ -21,7 +21,7 @@ if [[ -z "$SVN_PASSWORD" ]]; then
 fi
 
 if $INPUT_DRY_RUN; then
-	echo "ℹ︎ Dry run: no files will be committed to subversion."
+	echo "ℹ︎ Dry run: No files will be committed to Subversion."
 fi
 
 # Allow some ENV variables to be customized
