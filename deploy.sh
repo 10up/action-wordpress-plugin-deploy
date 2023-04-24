@@ -20,6 +20,10 @@ if [[ -z "$SVN_PASSWORD" ]]; then
 	exit 1
 fi
 
+if $INPUT_DRY_RUN; then
+	echo "ℹ︎ Dry run: No files will be committed to Subversion."
+fi
+
 # Allow some ENV variables to be customized
 if [[ -z "$SLUG" ]]; then
 	SLUG=${GITHUB_REPOSITORY#*/}
@@ -157,8 +161,12 @@ svn update
 
 svn status
 
-echo "➤ Committing files..."
-svn commit -m "Update to version $VERSION from GitHub" --no-auth-cache --non-interactive  --username "$SVN_USERNAME" --password "$SVN_PASSWORD"
+if $INPUT_DRY_RUN; then
+  echo "➤ Dry run: Files not committed."
+else
+  echo "➤ Committing files..."
+  svn commit -m "Update to version $VERSION from GitHub" --no-auth-cache --non-interactive  --username "$SVN_USERNAME" --password "$SVN_PASSWORD"
+fi
 
 if $INPUT_GENERATE_ZIP; then
   echo "Generating zip file..."

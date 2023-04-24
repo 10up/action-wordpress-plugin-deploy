@@ -19,13 +19,14 @@ This Action commits the contents of your Git tag to the WordPress.org plugin rep
 [Secrets are set in your repository settings](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/creating-and-using-encrypted-secrets). They cannot be viewed once stored.
 
 ### Optional environment variables
-* `SLUG` - defaults to the repository name, customizable in case your WordPress repository has a different slug or is capitalized differently.
-* `VERSION` - defaults to the tag name; do not recommend setting this except for testing purposes.
-* `ASSETS_DIR` - defaults to `.wordpress-org`, customizable for other locations of WordPress.org plugin repository-specific assets that belong in the top-level `assets` directory (the one on the same level as `trunk`).
-* `BUILD_DIR` - defaults to `false`. Set this flag to the directory where you build your plugins files into, then the action will copy and deploy files from that directory. Both absolute and relative paths are supported. The relative path if provided will be concatenated with the repository root directory. All files and folders in the build directory will be deployed, `.disignore` or `.gitattributes` will be ignored.
+* `SLUG` - Defaults to the repository name. This is customizable in case your WordPress repository has a different slug or is capitalized differently.
+* `VERSION` - Defaults to the tag name.  We do not recommend setting this except for testing purposes.
+* `ASSETS_DIR` - Defaults to `.wordpress-org`. This is customizable for other locations of WordPress.org plugin repository-specific assets that belong in the top-level `assets` directory (the one on the same level as `trunk`).
+* `BUILD_DIR` - Defaults to `false`. Set this flag to the directory where you build your plugins files into, then the action will copy and deploy files from that directory. Both absolute and relative paths are supported. The relative path if provided will be concatenated with the repository root directory. All files and folders in the build directory will be deployed, `.disignore` or `.gitattributes` will be ignored.
 
 ### Inputs
-* `generate-zip` - Generate a ZIP file from the SVN `trunk` directory. Outputs a `zip-path` variable for use in further workflow steps. Defaults to false.
+* `generate-zip` - Defaults to `false`. Generate a ZIP file from the SVN `trunk` directory. Outputs a `zip-path` variable for use in further workflow steps.
+* `dry-run` - Defaults to `false`. Set this to `true` if you want to skip the final Subversion commit step (e.g., to debug prior to a non-dry-run commit).
 
 ### Outputs
 * `zip-path` - The path to the ZIP file generated if `generate-zip` is set to `true`. Fully qualified including the filename, intended for use in further workflow steps such as uploading release assets.
