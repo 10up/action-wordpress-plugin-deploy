@@ -8,6 +8,9 @@ inputs:
   generate-zip:
     description: 'Generate package zip file?'
     default: false
+  dry-run:
+    description: 'Run the deployment process without committing.'
+    default: false
 outputs:
   zip-path:
     description: 'Path to zip file'
@@ -18,5 +21,6 @@ runs:
     - id: deploy
       env:
         INPUT_GENERATE_ZIP: ${{ inputs.generate-zip }}
+        INPUT_DRY_RUN: ${{ inputs.dry-run }}
       run: ${{ github.action_path }}/deploy.sh
       shell: bash
