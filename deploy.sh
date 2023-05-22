@@ -2,8 +2,8 @@
 
 # Note that this does not use pipefail
 # because if the grep later doesn't match any deleted files,
-# which is likely the majority case,
-# it does not exit with a 0, and I only care about the final exit.
+# which is likely to be the case the majority of the time,
+# it does not exit with 0, as we are interested in the final exit.
 set -eo
 
 # Ensure SVN username and password are set
@@ -20,13 +20,17 @@ if [[ -z "$SVN_PASSWORD" ]]; then
 	exit 1
 fi
 
+if $INPUT_DRY_RUN; then
+	echo "ℹ︎ Dry run: No files will be committed to Subversion."
+fi
+
 # Allow some ENV variables to be customized
 if [[ -z "$SLUG" ]]; then
 	SLUG=${GITHUB_REPOSITORY#*/}
 fi
 echo "ℹ︎ SLUG is $SLUG"
 
-# Does it even make sense for VERSION to be editable in a workflow definition?
+# Allow setting custom version number in advanced workflows
 if [[ -z "$VERSION" ]]; then
 	VERSION="${GITHUB_REF#refs/tags/}"
 	VERSION="${VERSION#v}"
@@ -54,14 +58,19 @@ fi
 SVN_URL="https://plugins.svn.wordpress.org/${SLUG}/"
 SVN_DIR="${HOME}/svn-${SLUG}"
 
-# Checkout just trunk and assets for efficiency
-# Tagging will be handled on the SVN level
+# Checkout SVN repository.
 echo "➤ Checking out .org repository..."
 svn checkout --depth immediates "$SVN_URL" "$SVN_DIR"
 cd "$SVN_DIR"
 svn update --set-depth infinity assets
 svn update --set-depth infinity trunk
+svn update --set-depth immediates tags
 
+# Bail early if the plugin version is already published.
+if [[ -d "tags/$VERSION" ]]; then
+	echo "ℹ︎ Version $VERSION of plugin $SLUG was already published";
+	exit
+fi
 
 if [[ "$BUILD_DIR" = false ]]; then
 	echo "➤ Copying files..."
@@ -78,6 +87,11 @@ if [[ "$BUILD_DIR" = false ]]; then
 		# "Export" a cleaned copy to a temp directory
 		TMP_DIR="${HOME}/archivetmp"
 		mkdir "$TMP_DIR"
+
+		# Workaround for: detected dubious ownership in repository at '/github/workspace' issue.
+		# see: https://github.com/10up/action-wordpress-plugin-deploy/issues/116
+		# Mark github workspace as safe directory.
+		git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
 		git config --global user.email "10upbot+github@10up.com"
 		git config --global user.name "10upbot on GitHub"
@@ -152,14 +166,22 @@ svn update
 
 svn status
 
-echo "➤ Committing files..."
-svn commit -m "Update to version $VERSION from GitHub" --no-auth-cache --non-interactive  --username "$SVN_USERNAME" --password "$SVN_PASSWORD"
+if $INPUT_DRY_RUN; then
+  echo "➤ Dry run: Files not committed."
+else
+  echo "➤ Committing files..."
+  svn commit -m "Update to version $VERSION from GitHub" --no-auth-cache --non-interactive  --username "$SVN_USERNAME" --password "$SVN_PASSWORD"
+fi
 
 if $INPUT_GENERATE_ZIP; then
   echo "Generating zip file..."
-  cd "$SVN_DIR/trunk" || exit
-  zip -r "${GITHUB_WORKSPACE}/${SLUG}.zip" .
-  echo "::set-output name=zip-path::${GITHUB_WORKSPACE}/${SLUG}.zip"
+
+  # use a symbolic link so the directory in the zip matches the slug
+  ln -s "${SVN_DIR}/trunk" "${SVN_DIR}/${SLUG}"
+  zip -r "${GITHUB_WORKSPACE}/${SLUG}.zip" "$SLUG"
+  unlink "${SVN_DIR}/${SLUG}"
+
+  echo "zip-path=${GITHUB_WORKSPACE}/${SLUG}.zip" >> "${GITHUB_OUTPUT}"
   echo "✓ Zip file generated!"
 fi
 

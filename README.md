@@ -2,7 +2,7 @@
 
 > Deploy your plugin to the WordPress.org repository using GitHub Actions.
 
-[![Support Level](https://img.shields.io/badge/support-active-green.svg)](#support-level) [![Release Version](https://img.shields.io/github/release/10up/action-wordpress-plugin-deploy.svg)](https://github.com/10up/action-wordpress-plugin-deploy/releases/latest) [![MIT License](https://img.shields.io/github/license/10up/action-wordpress-plugin-deploy.svg)](https://github.com/10up/action-wordpress-plugin-deploy/blob/develop/LICENSE)
+[![Support Level](https://img.shields.io/badge/support-active-green.svg)](#support-level) [![Release Version](https://img.shields.io/github/release/10up/action-wordpress-plugin-deploy.svg)](https://github.com/10up/action-wordpress-plugin-deploy/releases/latest) [![MIT License](https://img.shields.io/github/license/10up/action-wordpress-plugin-deploy.svg)](https://github.com/10up/action-wordpress-plugin-deploy/blob/develop/LICENSE) [![Automated Tests](https://github.com/10up/action-wordpress-plugin-deploy/actions/workflows/test.yml/badge.svg)](https://github.com/10up/action-wordpress-plugin-deploy/actions/workflows/test.yml)
 
 This Action commits the contents of your Git tag to the WordPress.org plugin repository using the same tag name. It can exclude files as defined in either `.distignore` or `.gitattributes`, and moves anything from a `.wordpress-org` subdirectory to the top-level `assets` directory in Subversion (plugin banners, icons, and screenshots).
 
@@ -13,24 +13,30 @@ This Action commits the contents of your Git tag to the WordPress.org plugin rep
 ## Configuration
 
 ### Required secrets
+
 * `SVN_USERNAME`
 * `SVN_PASSWORD`
 
 [Secrets are set in your repository settings](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/creating-and-using-encrypted-secrets). They cannot be viewed once stored.
 
 ### Optional environment variables
-* `SLUG` - defaults to the repository name, customizable in case your WordPress repository has a different slug or is capitalized differently.
-* `VERSION` - defaults to the tag name; do not recommend setting this except for testing purposes.
-* `ASSETS_DIR` - defaults to `.wordpress-org`, customizable for other locations of WordPress.org plugin repository-specific assets that belong in the top-level `assets` directory (the one on the same level as `trunk`).
-* `BUILD_DIR` - defaults to `false`. Set this flag to the directory where you build your plugins files into, then the action will copy and deploy files from that directory. Both absolute and relative paths are supported. The relative path if provided will be concatenated with the repository root directory. All files and folders in the build directory will be deployed, `.disignore` or `.gitattributes` will be ignored.
+
+* `SLUG` - Defaults to the repository name. This is customizable in case your WordPress repository has a different slug or is capitalized differently.
+* `VERSION` - Defaults to the tag name.  We do not recommend setting this except for testing purposes.
+* `ASSETS_DIR` - Defaults to `.wordpress-org`. This is customizable for other locations of WordPress.org plugin repository-specific assets that belong in the top-level `assets` directory (the one on the same level as `trunk`).
+* `BUILD_DIR` - Defaults to `false`. Set this flag to the directory where you build your plugins files into, then the action will copy and deploy files from that directory. Both absolute and relative paths are supported. The relative path if provided will be concatenated with the repository root directory. All files and folders in the build directory will be deployed, `.disignore` or `.gitattributes` will be ignored.
 
 ### Inputs
-* `generate-zip` - Generate a ZIP file from the SVN `trunk` directory. Outputs a `zip-path` variable for use in further workflow steps. Defaults to false.
+
+* `generate-zip` - Defaults to `false`. Generate a ZIP file from the SVN `trunk` directory. Outputs a `zip-path` variable for use in further workflow steps.
+* `dry-run` - Defaults to `false`. Set this to `true` if you want to skip the final Subversion commit step (e.g., to debug prior to a non-dry-run commit).
 
 ### Outputs
+
 * `zip-path` - The path to the ZIP file generated if `generate-zip` is set to `true`. Fully qualified including the filename, intended for use in further workflow steps such as uploading release assets.
 
 ## Excluding files from deployment
+
 If there are files or directories to be excluded from deployment, such as tests or editor config files, they can be specified in either a `.distignore` file or a `.gitattributes` file using the `export-ignore` directive. If a `.distignore` file is present, it will be used; if not, the Action will look for a `.gitattributes` file and barring that, will write a basic temporary `.gitattributes` into place before proceeding so that no Git/GitHub-specific files are included.
 
 `.distignore` is useful particularly when there are built files that are in `.gitignore`, and is a file that is used in [WP-CLI](https://wp-cli.org/). For modern plugin setups with a build step and no built files committed to the repository, this is the way forward. `.gitattributes` is useful for plugins that don't run a build step as a part of the Actions workflow and also allows for GitHub's generated ZIP files to contain the same contents as what is committed to WordPress.org. If you would like to attach a ZIP file with the proper contents that decompresses to a folder name without version number as WordPress generally expects, you can add steps to your workflow that generate the ZIP and attach it to the GitHub release (concrete examples to come).
@@ -63,7 +69,6 @@ If there are files or directories to be excluded from deployment, such as tests 
 /.gitignore export-ignore
 ```
 
-
 ## Example Workflow Files
 
 To get started, you will want to copy the contents of one of these examples into `.github/workflows/deploy.yml` and push that to your repository. You are welcome to name the file something else, but it must be in that directory. The usage of `ubuntu-latest` is recommended for compatibility with required dependencies in this Action.
@@ -95,6 +100,7 @@ jobs:
 ```
 
 ### Deploy on publishing a new release and attach a ZIP file to the release
+
 ```yml
 name: Deploy to WordPress.org
 on:
@@ -131,6 +137,7 @@ jobs:
 ```
 
 ## Contributing
+
 Want to help? Check out our [contributing guidelines](CONTRIBUTING.md) to get started.
 
 ## License

@@ -1,0 +1,11 @@
+- [x] Branch: Starting from `develop`, cut a release branch named `release/X.Y.Z` for your changes.
+- [ ] Changelog: Add/update the changelog in `CHANGELOG.md`. 
+- [ ] Props: update `CREDITS.md` file with any new contributors, confirm maintainers are accurate.
+- [ ] Readme updates: Make any other readme changes as necessary in `README.md`.
+- [ ] Merge: Make a non-fast-forward merge from your release branch to `develop` (or merge the pull request), then merge `develop` into `stable` (`git checkout stable && git merge --no-ff develop`).
+- [ ] Push: Push your stable branch to GitHub (e.g. `git push origin stable`).
+- [ ] Release: Create a [new release](https://github.com/10up/action-wordpress-plugin-deploy/releases/new), naming the tag and the release with the new version number, and targeting the `stable` branch. Paste the changelog from `CHANGELOG.md` into the body of the release and include a link to the closed issues on the [milestone](https://github.com/10up/action-wordpress-plugin-deploy/milestones/#?closed=1).  The release should now appear under [releases](https://github.com/10up/action-wordpress-plugin-deploy/releases).
+- [ ] Ensure the release [appears in the GitHub Marketplace](https://github.com/marketplace/actions/wordpress-plugin-deploy) correctly.
+- [ ] Close milestone: Edit the [milestone](https://github.com/10up/action-wordpress-plugin-deploy/milestones/) with release date (in the `Due date (optional)` field) and link to GitHub release (in the `Description field`), then close the milestone.
+- [ ] Punt incomplete items: If any open issues or PRs which were milestoned for `X.Y.Z` do not make it into the release, update their milestone to `X.Y.Z+1`, `X.Y+1.0`, `X+1.0.0` or `Future Release`.
+- [ ] Celebrate shipping!
