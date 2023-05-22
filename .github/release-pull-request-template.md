@@ -7,5 +7,5 @@
 - [ ] Release: Create a [new release](https://github.com/10up/action-wordpress-plugin-deploy/releases/new), naming the tag and the release with the new version number, and targeting the `stable` branch. Paste the changelog from `CHANGELOG.md` into the body of the release and include a link to the closed issues on the [milestone](https://github.com/10up/action-wordpress-plugin-deploy/milestones/#?closed=1).  The release should now appear under [releases](https://github.com/10up/action-wordpress-plugin-deploy/releases).
 - [ ] Ensure the release [appears in the GitHub Marketplace](https://github.com/marketplace/actions/wordpress-plugin-deploy) correctly.
 - [ ] Close milestone: Edit the [milestone](https://github.com/10up/action-wordpress-plugin-deploy/milestones/) with release date (in the `Due date (optional)` field) and link to GitHub release (in the `Description field`), then close the milestone.
-- [ ] Punt incomplete items: If any open issues or PRs which were milestoned for `X.Y.Z` do not make it into the release, update their milestone to `X.Y.Z+1`, `X.Y+- [ ]0`, `X+- [ ]0.0` or `Future Release`.
+- [ ] Punt incomplete items: If any open issues or PRs which were milestoned for `X.Y.Z` do not make it into the release, update their milestone to `X.Y.Z+1`, `X.Y+1.0`, `X+1.0.0` or `Future Release`.
 - [ ] Celebrate shipping!

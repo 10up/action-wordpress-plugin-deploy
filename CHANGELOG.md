@@ -4,10 +4,24 @@ All notable changes to this project will be documented in this file, per [the Ke
 
 ## [Unreleased] - TBD
 
+## [2.2.0] - 2023-05-18
+### Added
+- `DRY RUN` mode support that can be used while testing this action (props [@mukeshpanchal27](https://github.com/mukeshpanchal27), [@joemcgill](https://github.com/joemcgill), [@felixarntz](https://github.com/felixarntz), [@jeffpaul](https://github.com/jeffpaul), [@aaemnnosttv](https://github.com/aaemnnosttv), [@dkotter](https://github.com/dkotter), [@stephywells](https://github.com/stephywells) via [#122](https://github.com/10up/action-wordpress-plugin-deploy/pull/122), [#127](https://github.com/10up/action-wordpress-plugin-deploy/pull/127)).
+- Release workflow automation (props [@dinhtungdu](https://github.com/dinhtungdu), [@Sidsector9](https://github.com/Sidsector9) via [#107](https://github.com/10up/action-wordpress-plugin-deploy/pull/107)).
+
+### Changed
+- Generated zip now stores files with relative path for WP installation consistency (props [@JasonTheAdams](https://github.com/JasonTheAdams), [@helen](https://github.com/helen), [@dinhtungdu](https://github.com/dinhtungdu), [@iamdharmesh](https://github.com/iamdharmesh), [@dkotter](https://github.com/dkotter), [@shivapoudel](https://github.com/shivapoudel) via [#72](https://github.com/10up/action-wordpress-plugin-deploy/pull/72)).
+- Documentation updates (props [@UVLabs](https://github.com/UVLabs), [@jeffpaul](https://github.com/jeffpaul), [@mukeshpanchal27](https://github.com/mukeshpanchal27), [@10upsimon](https://github.com/10upsimon), [@joemcgill](https://github.com/joemcgill) via [#115](https://github.com/10up/action-wordpress-plugin-deploy/pull/115), [#120](https://github.com/10up/action-wordpress-plugin-deploy/pull/120)).
+
+### Fixed
+- Replaced the deprecated `set-output` command with redirection to `$GITHUB_OUTPUT` (props [@sjinks](https://github.com/sjinks), [@dkotter](https://github.com/dkotter), [@cadic](https://github.com/cadic) via [#108](https://github.com/10up/action-wordpress-plugin-deploy/pull/108)).
+- Detected dubious ownership issue for github workspace (props [@rahulsprajapati](https://github.com/rahulsprajapati), [@dkotter](https://github.com/dkotter), [@Stiofan](https://github.com/Stiofan) via [#119](https://github.com/10up/action-wordpress-plugin-deploy/pull/119)).
+- Stop attempting to re-publish the same version of a plugin (props [@mukeshpanchal27](https://github.com/mukeshpanchal27), [@joemcgill](https://github.com/joemcgill), [@felixarntz](https://github.com/felixarntz), [@faisal-alvi](https://github.com/faisal-alvi) via [#124](https://github.com/10up/action-wordpress-plugin-deploy/pull/124)).
+
 ## [2.1.1] - 2022-08-15
 ### Fixed
-- Resolve SVN commit failed: Directory out of date (props [@dinhtungdu](https://github.com/dinhtungdu), [@richard-muvirimi](https://github.com/richard-muvirimi) via [#96](https://github.com/10up/action-wordpress-plugin-deploy/pull/96))
-- Failure to set assets mime-type with `svn propset` (props [@diddledani](https://github.com/diddledani), [@dinhtungdu](https://github.com/dinhtungdu) via [#99](https://github.com/10up/action-wordpress-plugin-deploy/pull/99))
+- Resolve SVN commit failed: Directory out of date (props [@dinhtungdu](https://github.com/dinhtungdu), [@richard-muvirimi](https://github.com/richard-muvirimi) via [#96](https://github.com/10up/action-wordpress-plugin-deploy/pull/96)).
+- Failure to set assets mime-type with `svn propset` (props [@diddledani](https://github.com/diddledani), [@dinhtungdu](https://github.com/dinhtungdu) via [#99](https://github.com/10up/action-wordpress-plugin-deploy/pull/99)).
 
 ## [2.1.0] - 2022-04-12
 ### Added
@@ -19,7 +33,7 @@ All notable changes to this project will be documented in this file, per [the Ke
 - SVN error when plugin doesn't have an image (props [@Lewiscowles1986](https://github.com/Lewiscowles1986) via [#82](https://github.com/10up/action-wordpress-plugin-deploy/pull/82)).
 
 ## [2.0.0] - 2021-08-16
-This is now a composite Action, meaning that it runs directly on the GitHub Actions runner rather than spinning up its own container and is significantly faster.
+**This is now a composite Action, meaning that it runs directly on the GitHub Actions runner rather than spinning up its own container and is significantly faster.**
 
 ### Added
 - Add `zip-path` output, as the `SLUG` may not match the repository name (props [@ocean90](https://github.com/ocean90) via [#74](https://github.com/10up/action-wordpress-plugin-deploy/pull/74)).
@@ -60,6 +74,7 @@ This is now a composite Action, meaning that it runs directly on the GitHub Acti
 - Use more robust method of copying files (`-c` flag for `rsync`).
 
 [Unreleased]: https://github.com/10up/action-wordpress-plugin-deploy/compare/stable...develop
+[2.2.0]: https://github.com/10up/action-wordpress-plugin-deploy/compare/2.1.1...2.2.0
 [2.1.1]: https://github.com/10up/action-wordpress-plugin-deploy/compare/2.1.0...2.1.1
 [2.1.0]: https://github.com/10up/action-wordpress-plugin-deploy/compare/2.0.0...2.1.0
 [2.0.0]: https://github.com/10up/action-wordpress-plugin-deploy/compare/1.5.0...2.0.0
