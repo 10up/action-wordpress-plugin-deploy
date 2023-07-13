@@ -96,6 +96,8 @@ if [[ "$BUILD_DIR" = false ]]; then
 		git config --global user.email "10upbot+github@10up.com"
 		git config --global user.name "10upbot on GitHub"
 
+  		git commit -am "Add files that were built outside of the action"
+
 		# If there's no .gitattributes file, write a default one into place
 		if [[ ! -e "$GITHUB_WORKSPACE/.gitattributes" ]]; then
 			cat > "$GITHUB_WORKSPACE/.gitattributes" <<-EOL
