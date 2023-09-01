@@ -71,9 +71,7 @@ fi
 
 NEED_COMMIT=""
 
-if [ ! -z "$SKIP_WP_VERSION"]; then
-	echo "i Skipping update of Tested up to value"
-else
+if [ -z "$BUMP_WP_TESTED_UP_TO "]; then
 	echo "i Retrieving current WordPress version from wordpress.org"
 	STABLECHECK=`mktemp`
 	wget http://api.wordpress.org/core/stable-check/1.0/ -O $STABLECHECK

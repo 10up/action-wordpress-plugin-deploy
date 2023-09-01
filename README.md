@@ -23,12 +23,11 @@ This Action commits the contents of your Git tag to the WordPress.org plugin rep
 
 ### Optional environment variables
 
-
 * `SLUG` - Defaults to the repository name. This is customizable in case your WordPress repository has a different slug or is capitalized differently.
 * `VERSION` - Defaults to the tag name.  We do not recommend setting this except for testing purposes.
 * `ASSETS_DIR` - Defaults to `.wordpress-org`. This is customizable for other locations of WordPress.org plugin repository-specific assets that belong in the top-level `assets` directory (the one on the same level as `trunk`).
 * `BUILD_DIR` - Defaults to `false`. Set this flag to the directory where you build your plugins files into, then the action will copy and deploy files from that directory. Both absolute and relative paths are supported. The relative path if provided will be concatenated with the repository root directory. All files and folders in the build directory will be deployed, `.disignore` or `.gitattributes` will be ignored.
-* `SKIP_WP_VERSION` - skips the retrieval of the current WP version from wordpress.org and does not update the readme.txt's "Tested up to" line.
+* `BUMP_WP_TESTED_UP_TO ` - enable the retrieval of the current WP version from wordpress.org and updates the readme.txt's "Tested up to" line.
 * `SKIP_STABLE_TAG` - skips the update of the readme.txt's "Stable tag" line.
 * `SKIP_GIT_COMMIT` - if either the "Test up to line" or "stable tag" line were updated in the readme.txt, then skip committing those changes to the git repo.
 
