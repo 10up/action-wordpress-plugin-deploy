@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file, per [the Ke
 
 ## [Unreleased] - TBD
 
+## [2.2.1] - 2023-09-05
+### Fixed
+- Ensure built files are included when used without a `BUILD_DIR` and `.distignore` file (props [@akirk](https://github.com/akirk), [@iamdharmesh](https://github.com/iamdharmesh) via [#130](https://github.com/10up/action-wordpress-plugin-deploy/pull/130)).
+- Ensure a zip is generated when an existing version is found and the `generate-zip` input is set to `true` (props [@sy-records](https://github.com/sy-records), [@faisal-alvi](https://github.com/faisal-alvi) via [#133](https://github.com/10up/action-wordpress-plugin-deploy/pull/133)).
+
 ## [2.2.0] - 2023-05-18
 ### Added
 - `DRY RUN` mode support that can be used while testing this action (props [@mukeshpanchal27](https://github.com/mukeshpanchal27), [@joemcgill](https://github.com/joemcgill), [@felixarntz](https://github.com/felixarntz), [@jeffpaul](https://github.com/jeffpaul), [@aaemnnosttv](https://github.com/aaemnnosttv), [@dkotter](https://github.com/dkotter), [@stephywells](https://github.com/stephywells) via [#122](https://github.com/10up/action-wordpress-plugin-deploy/pull/122), [#127](https://github.com/10up/action-wordpress-plugin-deploy/pull/127)).
@@ -74,6 +79,7 @@ All notable changes to this project will be documented in this file, per [the Ke
 - Use more robust method of copying files (`-c` flag for `rsync`).
 
 [Unreleased]: https://github.com/10up/action-wordpress-plugin-deploy/compare/stable...develop
+[2.2.1]: https://github.com/10up/action-wordpress-plugin-deploy/compare/2.2.0...2.2.1
 [2.2.0]: https://github.com/10up/action-wordpress-plugin-deploy/compare/2.1.1...2.2.0
 [2.1.1]: https://github.com/10up/action-wordpress-plugin-deploy/compare/2.1.0...2.1.1
 [2.1.0]: https://github.com/10up/action-wordpress-plugin-deploy/compare/2.0.0...2.1.0
