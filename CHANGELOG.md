@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file, per [the Ke
 
 ## [Unreleased] - TBD
 
+## [2.2.2] - 2023-09-07
+### Fixed
+- Ensure the deploy action works properly when a `.distignore` file is not present (props [@iamdharmesh](https://github.com/iamdharmesh), [@dkotter](https://github.com/dkotter) via [#137](https://github.com/10up/action-wordpress-plugin-deploy/pull/137)).
+
 ## [2.2.1] - 2023-09-05
 ### Fixed
 - Ensure built files are included when used without a `BUILD_DIR` and `.distignore` file (props [@akirk](https://github.com/akirk), [@iamdharmesh](https://github.com/iamdharmesh) via [#130](https://github.com/10up/action-wordpress-plugin-deploy/pull/130)).
@@ -79,6 +83,7 @@ All notable changes to this project will be documented in this file, per [the Ke
 - Use more robust method of copying files (`-c` flag for `rsync`).
 
 [Unreleased]: https://github.com/10up/action-wordpress-plugin-deploy/compare/stable...develop
+[2.2.2]: https://github.com/10up/action-wordpress-plugin-deploy/compare/2.2.1...2.2.2
 [2.2.1]: https://github.com/10up/action-wordpress-plugin-deploy/compare/2.2.0...2.2.1
 [2.2.0]: https://github.com/10up/action-wordpress-plugin-deploy/compare/2.1.1...2.2.0
 [2.1.1]: https://github.com/10up/action-wordpress-plugin-deploy/compare/2.1.0...2.1.1
