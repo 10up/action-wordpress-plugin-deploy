@@ -30,3 +30,4 @@ jobs:
         asset_path: ${{ steps.deploy.outputs.zip-path }}
         asset_name: ${{ github.event.repository.name }}.zip
         asset_content_type: application/zip
+        
