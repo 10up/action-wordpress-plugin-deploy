@@ -1,0 +1,100 @@
+# The name of the Github Action that displays in github.com/<username>/<repo>/actions
+name: Deploy to WordPress.org Repository
+
+# Here we can define the events "on" which the action should be triggered.
+on:
+
+  # Since we want to publish new versions of our plugin, we only want this action to
+  # run when publishing a new release.
+  #
+  # The released version of the plugin will then be deployed to the repository.
+  #
+  # This allows us to run and manage plugin releases from a single location.
+  release:
+
+    # run only when a new release is published, but not when it's classified as a pre-release.
+    types: [released]
+
+# A list of jobs involved in this workflow.
+jobs:
+
+  # A unique job identifier.
+  #
+  # Github Actions can have multiple jobs and each can be referenced by its name.
+  # However, we only need to run a few steps here and they can be handled in a single job.
+  deploy_to_wp_repository:
+
+    # The proper name for the job being run.
+    name: Deploy to WP.org
+
+    # The environment this job should run on. In the context of WordPress, ubuntu-latest is
+    # pretty typical. Since we are only interacting with git and subversion, Ubuntu is perfect
+    # for this.
+    #
+    # Github does offer other platforms if you need them: https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idruns-on
+    runs-on: ubuntu-latest
+
+    # Every job has a specific set of steps that it goes through to do its "work".
+    #
+    # Each step has a two key elements:
+    # • Name
+    # • a "run" command (an arbitrary CLI command to execute) OR a "uses" command that pulls in and executes a 3rd party action.
+    steps:
+
+    # Most workflows begin by checking out the repository into the workflow filesystem.
+    #
+    # This is just like cloning a repository except it only checks out the specific commit
+    # the job is executed for. In our case here, the commit that the release is attached to.
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    # Optional: If your plugin is using composer dependencies, we want to include them
+    # WITHOUT the dev dependencies.
+    - name: Build
+      run: |
+        npm install
+        npm run build
+    - name: WordPress Plugin Deploy
+
+      # You can add unique ids to specific steps if you want to reference their output later in the workflow.
+      #
+      # Here, this unique identifier lets us use the output from the action to get the zip-path later.
+      id: deploy
+
+      # The use statement lets us pull in the work done by 10up to deploy the plugin to the WordPress repository.
+      uses: 10up/action-wordpress-plugin-deploy@stable
+
+      # Steps can also provide arguments, so this configures 10up's action to also generate a zip file.
+      with:
+        generate-zip: true
+
+      # Steps can also set environment variables which can be configured in the Github settings for the
+      # repository. Here, we are using action secrets SVN_USERNAME, SVN_PASSWORD, and PLUGIN_SLUG which
+      # authenticate with WordPress and lets the action deploy our plugin to the repository.
+      #
+      # To learn more about setting and using secrets with Github Actions, check out: https://docs.github.com/en/actions/security-guides/encrypted-secrets?tool=webui#about-encrypted-secrets
+      env:
+        SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+        SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+
+    # After the deploy, we also want to create a zip and upload it to the release on Github. We don't want
+    # users to have to go to the repository to find our plugin :).
+    - name: Upload release asset
+      uses: actions/upload-release-asset@v1
+      env:
+        # Note, this is an exception to action secrets: GH_TOKEN is always available and provides access to
+        # the current repository this action runs in.
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      with:
+        # Get the URL for uploading assets to the current release.
+        upload_url: ${{ github.event.release.upload_url }}
+
+        # Provide the path to the file generated in the previous step using the output.
+        asset_path: ${{ steps.deploy.outputs.zip-path }}
+
+        # Provide what the file should be named when attached to the release (plugin-name.zip)
+        asset_name: ${{ github.event.repository.name }}.zip
+
+        # Provide the file type.
+        asset_content_type: application/zip
