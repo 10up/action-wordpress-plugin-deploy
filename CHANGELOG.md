@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file, per [the Ke
 
 ## [Unreleased] - TBD
 
+## [2.3.0] - 2025-01-21
+### Added
+- Example workflow files to documentation (props [@jeffpaul](https://github.com/jeffpaul), [@AlecRust](https://github.com/AlecRust), [@helen](https://github.com/helen), [@peterwilsoncc](https://github.com/peterwilsoncc) via [#143](https://github.com/10up/action-wordpress-plugin-deploy/pull/143)).
+- Add comments to the example workflow file to help better explain what each step does (props [@tarecord](https://github.com/tarecord), [@jeffpaul](https://github.com/jeffpaul) via [#144](https://github.com/10up/action-wordpress-plugin-deploy/pull/144)).
+- Documentation update in the `README` with required `actions/checkout` step for clarity in example workflow (props [@frankiebordone](https://github.com/frankiebordone), [@jeffpaul](https://github.com/jeffpaul), [@faisal-alvi](https://github.com/faisal-alvi) via [#154](https://github.com/10up/action-wordpress-plugin-deploy/pull/154)).
+
+### Changed
+- Update our example with a new release asset action (props [@Sidsector9](https://github.com/Sidsector9), [@jeffpaul](https://github.com/jeffpaul) via [#150](https://github.com/10up/action-wordpress-plugin-deploy/pull/150)).
+- Update action examples to show an svn install step (props [@thrijith](https://github.com/thrijith), [@iamdharmesh](https://github.com/iamdharmesh), [@dkotter](https://github.com/dkotter) via [#155](https://github.com/10up/action-wordpress-plugin-deploy/pull/155)).
+
+### Fixed
+- Install svn as part of the workflow if needed (props [@kirtangajjar](https://github.com/kirtangajjar), [@scott-sharethis](https://github.com/scott-sharethis), [@Surbma](https://github.com/Surbma), [@alicolville](https://github.com/alicolville), [@tobeyadr](https://github.com/tobeyadr), [@fumikito](https://github.com/fumikito), [@dkotter](https://github.com/dkotter) via [#160](https://github.com/10up/action-wordpress-plugin-deploy/pull/160)).
+- Typo in the `README` file (props [@pedro-mendonca](https://github.com/pedro-mendonca), [@faisal-alvi](https://github.com/faisal-alvi) via [#145](https://github.com/10up/action-wordpress-plugin-deploy/pull/145)).
+
+### Developer
+- Replaced `lee-dohm/no-response` with `actions/stale` to help with closing no-response/stale issues (props [@jeffpaul](https://github.com/jeffpaul), [@dkotter](https://github.com/dkotter) via [#147](https://github.com/10up/action-wordpress-plugin-deploy/pull/147)).
+
 ## [2.2.2] - 2023-09-07
 ### Fixed
 - Ensure the deploy action works properly when a `.distignore` file is not present (props [@iamdharmesh](https://github.com/iamdharmesh), [@dkotter](https://github.com/dkotter) via [#137](https://github.com/10up/action-wordpress-plugin-deploy/pull/137)).
@@ -83,6 +100,7 @@ All notable changes to this project will be documented in this file, per [the Ke
 - Use more robust method of copying files (`-c` flag for `rsync`).
 
 [Unreleased]: https://github.com/10up/action-wordpress-plugin-deploy/compare/stable...develop
+[2.3.0]: https://github.com/10up/action-wordpress-plugin-deploy/compare/2.2.2...2.3.0
 [2.2.2]: https://github.com/10up/action-wordpress-plugin-deploy/compare/2.2.1...2.2.2
 [2.2.1]: https://github.com/10up/action-wordpress-plugin-deploy/compare/2.2.0...2.2.1
 [2.2.0]: https://github.com/10up/action-wordpress-plugin-deploy/compare/2.1.1...2.2.0

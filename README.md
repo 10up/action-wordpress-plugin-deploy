@@ -29,7 +29,7 @@ This Action commits the contents of your Git tag to the WordPress.org plugin rep
 ### Inputs
 
 * `generate-zip` - Defaults to `false`. Generate a ZIP file from the SVN `trunk` directory. Outputs a `zip-path` variable for use in further workflow steps.
-* `dry-run` - Defaults to `false`. Set this to `true` if you want to skip the final Subversion commit step (e.g., to debug prior to a non-dry-run commit).
+* `dry-run` - Defaults to `false`. Set this to `true` if you want to skip the final Subversion commit step (e.g., to debug prior to a non-dry-run commit). `dry-run` - `true` Doesn't require SVN secret.
 
 ### Outputs
 
@@ -77,6 +77,12 @@ Current set of example workflow files:
 
 * [Deploy on publishing a new release and attach a ZIP file to the release](examples/deploy-on-publishing-a-new-release-and-attach-a-zip-file-to-the-release.yml)
 * [Deploy on pushing a new tag](examples/deploy-on-pushing-a-new-tag.yml)
+
+**Note**: The following step is required to check out the repository for use during the workflow run:
+```
+- uses: actions/checkout@v4
+```
+
 * [Deploy on pushing a new tag and create release with attached ZIP](examples/deploy-on-pushing-a-new-tag-and-create-release-with-attached-zip.yml)
 
 ## Contributing
