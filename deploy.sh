@@ -130,11 +130,34 @@ if [[ "$BUILD_DIR" = false ]]; then
 	echo "➤ Copying files..."
 	if [[ -e "$GITHUB_WORKSPACE/.distignore" ]]; then
 		echo "ℹ︎ Using .distignore"
+
+		# Deleting the git data so that the repo is reinitialized
+		rm -rf "$GITHUB_WORKSPACE/.git"
+
+		# Removing the existing .gitignore file to replace it with the .distignore file
+		rm "$GITHUB_WORKSPACE/.gitignore"
+
+		# Renaming the .distignore file to .gitignore
+		cp "$GITHUB_WORKSPACE/.distignore" "$GITHUB_WORKSPACE/.gitignore"
+
+		cd "$GITHUB_WORKSPACE"
+
+		# Initializing the git repo for the new .gitignore file to be taken into account
+		git init
+
+		git add . > /dev/null 2>&1
+
+		# Get the list files to be copied into a txt file.
+		git ls-files > included-files.txt
+
+		# Return to the SVN dir.
+		cd "$SVN_DIR"
+
 		# Copy from current branch to /trunk, excluding dotorg assets
-		# The --filter flag will allow the full .gitignore syntax to be used in .distignore
+		# The --files-from flag will only copy files from the included files list
 		# The --delete flag will delete anything in destination that no longer exists in source
 		# The --itemize-changes flag will show the changes made to each file
-		rsync -rcv --filter="merge,- $GITHUB_WORKSPACE/.distignore" "$GITHUB_WORKSPACE/" trunk/ --delete --itemize-changes
+		rsync -rcv --files-from="$GITHUB_WORKSPACE/included-files.txt" "$GITHUB_WORKSPACE/" trunk/ --delete --itemize-changes
 	else
 		echo "ℹ︎ Using .gitattributes"
 
