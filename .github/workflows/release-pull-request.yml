@@ -1,5 +1,9 @@
 name: Release Pull Request Automation
 
+permissions:
+  contents: read
+  pull-requests: write
+
 on:
   create:
 jobs:
