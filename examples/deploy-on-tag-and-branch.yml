@@ -1,0 +1,28 @@
+name: Deploy readme and assets to WordPress.org
+on:
+  push:
+    branches:
+      # Or use your primary branch name, e.g. main, trunk, master
+      - main
+    tags:
+      # On all tags.
+jobs:
+  trunk_only_deploy:
+    name: Trunk-only deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        # Optional build step; remove or customize as needed.
+      - name: Build
+        run: |
+          npm install
+          npm run build
+        # Deploy to both tags and trunk on tag, or only to trunk on trunk branch.
+      - name: WordPress Plugin Deploy
+        uses: 10up/action-wordpress-plugin-deploy@stable
+        with:
+          trunk-only: ${{ github.ref_name == 'trunk' }}
+        env:
+          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}

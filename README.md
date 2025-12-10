@@ -85,6 +85,7 @@ Current set of example workflow files:
 ```
 
 * [Deploy on pushing a new tag and create release with attached ZIP](examples/deploy-on-pushing-a-new-tag-and-create-release-with-attached-zip.yml)
+* [Deploy to both trunk and tag during release, and only to trunk during commits to the main branch](examples/deploy-on-tag-and-branch.yml)
 
 ## Contributing
 
