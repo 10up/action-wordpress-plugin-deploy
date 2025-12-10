@@ -220,7 +220,7 @@ svn status | grep '^\!' | sed 's/! *//' | xargs -I% svn rm %@ > /dev/null
 # doing a trunk-only deployment.
 if [[ -n "$VERSION" && -z "$INPUT_TRUNK_ONLY" ]]; then
 	echo "➤ Copying tag..."
-	svn cp trunk "tags/$VERSION"
+	svn cp "trunk" "tags/$VERSION"
 fi
 
 # Fix screenshots getting force downloaded when clicking them
