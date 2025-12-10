@@ -18,11 +18,11 @@ jobs:
         run: |
           npm install
           npm run build
-        # Deploy to both tags and trunk on tag, or only to trunk on trunk branch.
+        # Deploy to both tags and trunk on tag, or only to trunk on main branch.
       - name: WordPress Plugin Deploy
         uses: 10up/action-wordpress-plugin-deploy@stable
         with:
-          trunk-only: ${{ github.ref_name == 'trunk' }}
+          trunk-only: ${{ github.ref_name == 'main' }}
         env:
           SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
           SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
