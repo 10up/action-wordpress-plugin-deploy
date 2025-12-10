@@ -12,7 +12,7 @@ inputs:
     description: 'Run the deployment process without committing.'
     default: false
   trunk-only:
-    description: 'Deploy only to trunk/assets without creating a new tag in the WordPress.org plugin repository.'
+    description: 'Deploy only to trunk/assets without creating a new tag.'
     default: false
 outputs:
   zip-path:
