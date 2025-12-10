@@ -67,12 +67,18 @@ if [[ -z "$SLUG" ]]; then
 fi
 echo "ℹ︎ SLUG is $SLUG"
 
-# Allow setting custom version number in advanced workflows
-if [[ -z "$VERSION" ]]; then
+# Allow setting custom version number in advanced workflows.
+# By default, only derive VERSION from tag refs; branch refs will
+# result in an empty VERSION so we can support trunk-only deployments.
+if [[ -z "$VERSION" && "$GITHUB_REF" == refs/tags/* ]]; then
 	VERSION="${GITHUB_REF#refs/tags/}"
 	VERSION="${VERSION#v}"
 fi
-echo "ℹ︎ VERSION is $VERSION"
+if [[ -n "$VERSION" ]]; then
+	echo "ℹ︎ VERSION is $VERSION"
+else
+	echo "ℹ︎ VERSION is not set; trunk-only deployment assumed unless overridden."
+fi
 
 if [[ -z "$ASSETS_DIR" ]]; then
 	ASSETS_DIR=".wordpress-org"
@@ -118,7 +124,9 @@ generate_zip() {
 }
 
 # Bail early if the plugin version is already published.
-if [[ -d "tags/$VERSION" ]]; then
+# Only relevant when we are creating a new tag, not for
+# trunk-only deployments where VERSION may be empty.
+if [[ ! $INPUT_TRUNK_ONLY && -n "$VERSION" && -d "tags/$VERSION" ]] then
 	echo "ℹ︎ Version $VERSION of plugin $SLUG was already published";
 
 	generate_zip
@@ -203,9 +211,12 @@ svn add . --force > /dev/null
 # Also suppress stdout here
 svn status | grep '^\!' | sed 's/! *//' | xargs -I% svn rm %@ > /dev/null
 
-# Copy tag locally to make this a single commit
-echo "➤ Copying tag..."
-svn cp "trunk" "tags/$VERSION"
+# Copy tag locally to make this a single commit when not
+# doing a trunk-only deployment.
+if [[ -n "$VERSION" && ! $INPUT_TRUNK_ONLY ]] then
+	echo "➤ Copying tag..."
+	svn cp trunk "tags/$VERSION"
+fi
 
 # Fix screenshots getting force downloaded when clicking them
 # https://developer.wordpress.org/plugins/wordpress-org/plugin-assets/
@@ -231,7 +242,13 @@ if $INPUT_DRY_RUN; then
   echo "➤ Dry run: Files not committed."
 else
   echo "➤ Committing files..."
-  svn commit -m "Update to version $VERSION from GitHub" --no-auth-cache --non-interactive  --username "$SVN_USERNAME" --password "$SVN_PASSWORD"
+
+  COMMIT_MSG="Update from GitHub"
+  if [[ -n "$VERSION" && ! $INPUT_TRUNK_ONLY ]] then
+    COMMIT_MSG="Update to version $VERSION from GitHub"
+  fi
+
+  svn commit -m "$COMMIT_MSG" --no-auth-cache --non-interactive  --username "$SVN_USERNAME" --password "$SVN_PASSWORD"
 fi
 
 generate_zip
