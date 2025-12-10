@@ -11,6 +11,9 @@ inputs:
   dry-run:
     description: 'Run the deployment process without committing.'
     default: false
+  trunk-only:
+    description: 'Deploy only to trunk/assets without creating a new tag in the WordPress.org plugin repository.'
+    default: false
 outputs:
   zip-path:
     description: 'Path to zip file'
@@ -22,5 +25,6 @@ runs:
       env:
         INPUT_GENERATE_ZIP: ${{ inputs.generate-zip }}
         INPUT_DRY_RUN: ${{ inputs.dry-run }}
+        INPUT_TRUNK_ONLY: ${{ inputs.trunk-only }}
       run: ${{ github.action_path }}/deploy.sh
       shell: bash

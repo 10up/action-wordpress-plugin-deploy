@@ -30,6 +30,7 @@ This Action commits the contents of your Git tag to the WordPress.org plugin rep
 
 * `generate-zip` - Defaults to `false`. Generate a ZIP file from the SVN `trunk` directory. Outputs a `zip-path` variable for use in further workflow steps.
 * `dry-run` - Defaults to `false`. Set this to `true` if you want to skip the final Subversion commit step (e.g., to debug prior to a non-dry-run commit). `dry-run` - `true` Doesn't require SVN secret.
+* `trunk-only` - Defaults to `false`. When set to `true`, deploys only to the WordPress.org `trunk` and `assets` directories without creating a new tag in the plugin repository. Useful for updating `readme.txt` (for example, the `Tested up to` value) or assets between full releases.
 
 ### Outputs
 
