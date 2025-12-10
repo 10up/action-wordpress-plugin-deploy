@@ -80,6 +80,11 @@ else
 	echo "ℹ︎ VERSION is not set; trunk-only deployment assumed unless overridden."
 fi
 
+# Cast to empty string when not set for easier -n checks.
+if [[ "$INPUT_TRUNK_ONLY" != "true" ]]; then
+	INPUT_TRUNK_ONLY=""
+fi
+
 if [[ -z "$ASSETS_DIR" ]]; then
 	ASSETS_DIR=".wordpress-org"
 fi
@@ -126,7 +131,7 @@ generate_zip() {
 # Bail early if the plugin version is already published.
 # Only relevant when we are creating a new tag, not for
 # trunk-only deployments where VERSION may be empty.
-if [[ ! $INPUT_TRUNK_ONLY && -n "$VERSION" && -d "tags/$VERSION" ]] then
+if [[ -n "$VERSION" && -d "tags/$VERSION" && -z "$INPUT_TRUNK_ONLY" ]]; then
 	echo "ℹ︎ Version $VERSION of plugin $SLUG was already published";
 
 	generate_zip
@@ -213,7 +218,7 @@ svn status | grep '^\!' | sed 's/! *//' | xargs -I% svn rm %@ > /dev/null
 
 # Copy tag locally to make this a single commit when not
 # doing a trunk-only deployment.
-if [[ -n "$VERSION" && ! $INPUT_TRUNK_ONLY ]] then
+if [[ -n "$VERSION" && -z "$INPUT_TRUNK_ONLY" ]]; then
 	echo "➤ Copying tag..."
 	svn cp trunk "tags/$VERSION"
 fi
@@ -244,7 +249,7 @@ else
   echo "➤ Committing files..."
 
   COMMIT_MSG="Update from GitHub"
-  if [[ -n "$VERSION" && ! $INPUT_TRUNK_ONLY ]] then
+  if [[ -n "$VERSION" && -z "$INPUT_TRUNK_ONLY" ]]; then
     COMMIT_MSG="Update to version $VERSION from GitHub"
   fi
 
