@@ -150,6 +150,11 @@ if [[ "$BUILD_DIR" = false ]]; then
 		# Get the list files to be copied into a txt file.
 		git ls-files > included-files.txt
 
+		# Display the list of files to be copied
+		file_count=$(wc -l < included-files.txt)
+		echo "ℹ︎ Files to be copied ($file_count files):"
+		cat included-files.txt | sed 's/^/  /'
+
 		# Return to the SVN dir.
 		cd "$SVN_DIR"
 
