@@ -178,7 +178,7 @@ if [[ "$BUILD_DIR" = false ]]; then
 			# Iterate until no more empty directories are found
 			# This handles cases where removing a child directory makes the parent empty
 			iterations=0
-			max_iterations=100  # Safety limit to prevent infinite loops
+			max_iterations=200  # Safety limit to prevent infinite loops
 			while [ $iterations -lt $max_iterations ]; do
 				# Find empty directories, processing from deepest to shallowest
 				empty_dirs=$(find . -type d -depth -mindepth 1 -empty)
