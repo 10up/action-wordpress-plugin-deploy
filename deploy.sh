@@ -175,13 +175,29 @@ if [[ "$BUILD_DIR" = false ]]; then
 			done
 			
 			# Remove empty directories that may have been left behind
-			# Process directories from deepest to shallowest (-depth) to avoid issues
-			# This ensures child directories are removed before parent directories
-			find . -type d -depth -mindepth 1 -empty -print0 | while IFS= read -r -d '' dir; do
-				dir_path="${dir#./}"
-				echo "ℹ︎ Removing empty directory: $dir_path"
-				rmdir "$dir" 2>/dev/null || true
+			# Iterate until no more empty directories are found
+			# This handles cases where removing a child directory makes the parent empty
+			iterations=0
+			max_iterations=100  # Safety limit to prevent infinite loops
+			while [ $iterations -lt $max_iterations ]; do
+				# Find empty directories, processing from deepest to shallowest
+				empty_dirs=$(find . -type d -depth -mindepth 1 -empty)
+				if [ -z "$empty_dirs" ]; then
+					# No more empty directories found
+					break
+				fi
+				# Remove all found empty directories
+				echo "$empty_dirs" | while IFS= read -r dir; do
+					if rmdir "$dir" 2>/dev/null; then
+						dir_path="${dir#./}"
+						echo "ℹ︎ Removing empty directory: $dir_path"
+					fi
+				done
+				iterations=$((iterations + 1))
 			done
+			if [ $iterations -ge $max_iterations ]; then
+				echo "⚠ Warning: Reached maximum iterations ($max_iterations) for empty directory removal"
+			fi
 			
 			cd "$SVN_DIR"
 		fi
