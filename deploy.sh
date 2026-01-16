@@ -173,6 +173,16 @@ if [[ "$BUILD_DIR" = false ]]; then
 					rm -f "$file"
 				fi
 			done
+			
+			# Remove empty directories that may have been left behind
+			# Process directories from deepest to shallowest (-depth) to avoid issues
+			# This ensures child directories are removed before parent directories
+			find . -type d -depth -mindepth 1 -empty -print0 | while IFS= read -r -d '' dir; do
+				dir_path="${dir#./}"
+				echo "ℹ︎ Removing empty directory: $dir_path"
+				rmdir "$dir" 2>/dev/null || true
+			done
+			
 			cd "$SVN_DIR"
 		fi
 	else
