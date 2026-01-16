@@ -45,7 +45,7 @@ If there are files or directories to be excluded from deployment, such as tests 
 
 #### `.distignore`
 
-**Notes:** `.distignore` is for files to be ignored **only**; it does not currently allow negation like `.gitignore`. This comes from its current expected syntax in WP-CLI's [`wp dist-archive` command](https://github.com/wp-cli/dist-archive-command/). It is possible that this Action will allow for includes via something like a `.distinclude` file in the future, or that WP-CLI itself makes a change that this Action will reflect for consistency. It also will need to contain more than `.gitattributes` because that method **also** respects `.gitignore`.
+**Notes:** `.distignore` supports the full `.gitignore` syntax which allows negations such as `!important.txt`. This functionality comes from the WP-CLI's [`wp dist-archive` command](https://github.com/wp-cli/dist-archive-command/). 
 
 ```
 /.wordpress-org

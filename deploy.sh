@@ -130,9 +130,82 @@ if [[ "$BUILD_DIR" = false ]]; then
 	echo "➤ Copying files..."
 	if [[ -e "$GITHUB_WORKSPACE/.distignore" ]]; then
 		echo "ℹ︎ Using .distignore"
+
+		# Deleting the git data so that the repo is reinitialized
+		rm -rf "$GITHUB_WORKSPACE/.git"
+
+		# Removing the existing .gitignore file to replace it with the .distignore file
+		rm "$GITHUB_WORKSPACE/.gitignore"
+
+		# Renaming the .distignore file to .gitignore
+		cp "$GITHUB_WORKSPACE/.distignore" "$GITHUB_WORKSPACE/.gitignore"
+
+		cd "$GITHUB_WORKSPACE"
+
+		# Initializing the git repo for the new .gitignore file to be taken into account
+		git init
+
+		git add . > /dev/null 2>&1
+
+		# Get the list files to be copied into a txt file.
+		git ls-files > included-files.txt
+
+		# Display the list of files to be copied
+		file_count=$(wc -l < included-files.txt)
+		echo "ℹ︎ Files to be copied ($file_count files):"
+		cat included-files.txt | sed 's/^/  /'
+
+		# Return to the SVN dir.
+		cd "$SVN_DIR"
+
 		# Copy from current branch to /trunk, excluding dotorg assets
-		# The --delete flag will delete anything in destination that no longer exists in source
-		rsync -rc --exclude-from="$GITHUB_WORKSPACE/.distignore" "$GITHUB_WORKSPACE/" trunk/ --delete --delete-excluded
+		# The --files-from flag will only copy files from the included files list
+		# The --itemize-changes flag will show the changes made to each file
+		rsync -rcv --files-from="$GITHUB_WORKSPACE/included-files.txt" "$GITHUB_WORKSPACE/" trunk/ --itemize-changes
+
+		# Delete files in trunk/ that are not in the included files list
+		# This handles the case where files were previously committed but should now be excluded
+		# When using --files-from, --delete doesn't remove files not in the list, so we do it manually
+		if [ -d "trunk" ]; then
+			cd "$SVN_DIR/trunk"
+			# Find all files in trunk/ and check if they're in the included list
+			find . -type f -print0 | while IFS= read -r -d '' file; do
+				# Remove leading ./ from the file path for comparison
+				file_path="${file#./}"
+				# Check if this file is in the included files list
+				if ! grep -Fxq "$file_path" "$GITHUB_WORKSPACE/included-files.txt"; then
+					echo "ℹ︎ Removing excluded file: $file_path"
+					rm -f "$file"
+				fi
+			done
+			
+			# Remove empty directories that may have been left behind
+			# Iterate until no more empty directories are found
+			# This handles cases where removing a child directory makes the parent empty
+			iterations=0
+			max_iterations=200  # Safety limit to prevent infinite loops
+			while [ $iterations -lt $max_iterations ]; do
+				# Find empty directories, processing from deepest to shallowest
+				empty_dirs=$(find . -type d -depth -mindepth 1 -empty)
+				if [ -z "$empty_dirs" ]; then
+					# No more empty directories found
+					break
+				fi
+				# Remove all found empty directories
+				echo "$empty_dirs" | while IFS= read -r dir; do
+					if rmdir "$dir" 2>/dev/null; then
+						dir_path="${dir#./}"
+						echo "ℹ︎ Removing empty directory: $dir_path"
+					fi
+				done
+				iterations=$((iterations + 1))
+			done
+			if [ $iterations -ge $max_iterations ]; then
+				echo "⚠ Warning: Reached maximum iterations ($max_iterations) for empty directory removal"
+			fi
+			
+			cd "$SVN_DIR"
+		fi
 	else
 		echo "ℹ︎ Using .gitattributes"
 
