@@ -155,9 +155,26 @@ if [[ "$BUILD_DIR" = false ]]; then
 
 		# Copy from current branch to /trunk, excluding dotorg assets
 		# The --files-from flag will only copy files from the included files list
-		# The --delete flag will delete anything in destination that no longer exists in source
 		# The --itemize-changes flag will show the changes made to each file
-		rsync -rcv --files-from="$GITHUB_WORKSPACE/included-files.txt" "$GITHUB_WORKSPACE/" trunk/ --delete --itemize-changes
+		rsync -rcv --files-from="$GITHUB_WORKSPACE/included-files.txt" "$GITHUB_WORKSPACE/" trunk/ --itemize-changes
+
+		# Delete files in trunk/ that are not in the included files list
+		# This handles the case where files were previously committed but should now be excluded
+		# When using --files-from, --delete doesn't remove files not in the list, so we do it manually
+		if [ -d "trunk" ]; then
+			cd "$SVN_DIR/trunk"
+			# Find all files in trunk/ and check if they're in the included list
+			find . -type f -print0 | while IFS= read -r -d '' file; do
+				# Remove leading ./ from the file path for comparison
+				file_path="${file#./}"
+				# Check if this file is in the included files list
+				if ! grep -Fxq "$file_path" "$GITHUB_WORKSPACE/included-files.txt"; then
+					echo "ℹ︎ Removing excluded file: $file_path"
+					rm -f "$file"
+				fi
+			done
+			cd "$SVN_DIR"
+		fi
 	else
 		echo "ℹ︎ Using .gitattributes"
 
