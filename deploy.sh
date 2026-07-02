@@ -40,7 +40,7 @@ fi
 # Check if it's a dry-run first
 if $INPUT_DRY_RUN; then
   echo "ℹ︎ Dry run: No files will be committed to Subversion."
-  
+
   if [[ -z "$SVN_USERNAME" ]]; then
     echo "Warning: SVN_USERNAME is missing. The commit will fail if you attempt a real run."
   fi
@@ -66,6 +66,7 @@ if [[ -z "$SLUG" ]]; then
 	SLUG=${GITHUB_REPOSITORY#*/}
 fi
 echo "ℹ︎ SLUG is $SLUG"
+echo "ℹ︎ GITHUB_EVENT_NAME is $GITHUB_EVENT_NAME"
 
 # Allow setting custom version number in advanced workflows
 if [[ -z "$VERSION" ]]; then
