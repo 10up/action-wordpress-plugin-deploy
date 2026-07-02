@@ -72,7 +72,7 @@ echo "ℹ︎ GITHUB_EVENT_NAME is $GITHUB_EVENT_NAME"
 if [[ -z "$VERSION" ]]; then
 	if [[ "${GITHUB_EVENT_NAME}" == "release" ]]; then
 		echo "ℹ︎ GITHUB_EVENT_NAME is release, using github_event_release_tag_name"
-		VERSION="${github_event_release_tag_name}"
+		VERSION="${{ github.event.release.tag_name }}"
 	else
 		echo "ℹ︎ GITHUB_EVENT_NAME is not release, using github_ref"
 		VERSION="${GITHUB_REF#refs/tags/}"
