@@ -69,7 +69,12 @@ echo "ℹ︎ SLUG is $SLUG"
 
 # Allow setting custom version number in advanced workflows
 if [[ -z "$VERSION" ]]; then
-	VERSION="${GITHUB_REF#refs/tags/}"
+	if [[ "${GITHUB_EVENT_NAME}" == "release" ]]; then
+		VERSION="${github_event_release_tag_name}"
+	else
+		VERSION="${GITHUB_REF#refs/tags/}"
+	fi
+
 	VERSION="${VERSION#v}"
 fi
 echo "ℹ︎ VERSION is $VERSION"
